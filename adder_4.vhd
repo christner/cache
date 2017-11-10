@@ -4,7 +4,7 @@
 -- Architecture : structural
 -- Author: cpatel2
 -- Created On: 10/21/2004
--- Description: 
+-- Description:
 --
 ----------------------------------------------------------------------------------------------
 
