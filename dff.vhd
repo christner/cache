@@ -4,34 +4,35 @@
 -- Architecture : structural
 -- Author: cpatel2
 -- Created On:
--- Description: 
+-- Description:
 --
 --------------------------------------------------------------------------------------------------
 
 library STD;
-library IEEE;                      
+library IEEE;
 
-use IEEE.std_logic_1164.all;       
+use IEEE.std_logic_1164.all;
 
-entity dff is port ( d   : in  std_logic;
-         clk : in  std_logic;
-         q   : out std_logic;
-         qbar: out std_logic); 
-end dff;                          
+entity dff is port (
+    d   : in  std_logic;
+    clk : in  std_logic;
+    q   : out std_logic;
+    qbar: out std_logic);
+end dff;
 
-architecture structural of dff is 
+architecture structural of dff is
 begin
-  
-  output: process                 
-  begin                           
 
-    wait until ( clk'EVENT and clk = '0' ); 
+  output: process
+  begin
+
+    wait until ( clk'EVENT and clk = '0' );
     q <= d;
     qbar <= not d ;
 
-  end process output;        
+  end process output;
 
-                             
-end structural;  
+
+end structural;
 
 --------------------------------------------------------------------------------------------------
