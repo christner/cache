@@ -1,2 +1,8 @@
 INCA_libs/
+.simvision/
+*.shm/
+
 *.log
+*.swp
+*.key
+*~
