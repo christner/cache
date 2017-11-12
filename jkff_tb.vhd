@@ -32,32 +32,40 @@ architecture test of jkff_tb is
     end process clk;
 
   test1: process begin
+    wait until falling_edge(clock);
+    wait for 2 ns;
     j_i <= '0';
     k_i <= '1';
     wait until falling_edge(clock);
-
+    wait until falling_edge(clock);
+    wait for 2 ns;
     j_i <= '1';
     k_i <= '0';
     wait until falling_edge(clock);
 
-
+    wait for 2 ns;
     j_i <= '0';
     k_i <= '0';
     wait until falling_edge(clock);
-    wait until falling_edge(clock);
-
+    
+    wait for 2 ns;
     j_i <= '1';
     k_i <= '1';
     wait until falling_edge(clock);
-
+    wait until falling_edge(clock);
+    wait until falling_edge(clock);
+    wait for 2 ns;
     j_i <= '1';
     k_i <= '0';
     wait until falling_edge(clock);
-
+    wait for 2 ns;
     j_i <= '0';
     k_i <= '1';
     wait until falling_edge(clock);
-
+    wait for 3 ns;
+    j_i <= '1';
+    k_i <= '0';
+    wait for 3 ns;
     j_i <= '0';
     k_i <= '1';
     wait until falling_edge(clock);

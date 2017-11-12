@@ -25,21 +25,22 @@ architecture structural of jkff is
 signal temp : std_logic;
 
 begin
-  output: process
+  Q <= temp;
+  jk_flipflop: process (J, K, Clk)
   begin
     if  falling_edge(Clk) then
-     if (J='0' and K='0') then
+     if    (J='0' and K='0') then
        temp <= temp;
      elsif (J='0' and K='1') then
        temp <= '0';
      elsif (J='1' and K='1') then
        temp <= not (temp);
-     else
+     elsif (J='1' and K='0') then
        temp <= '1';
      end if;
    end if;
- end process;
- Q <= temp;
+ end process jk_flipflop;
+
 
 end structural;
 
