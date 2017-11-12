@@ -3,6 +3,23 @@ VCC_FLAGS	= -messages -linedebug -smartorder
 VELAB		= run_ncelab.bash
 VELAB_FLAGS	= -message -access rwc
 
+all: cache_cell_tb tag_3_tb
+
+tag_3_tb~ : tag_3~
+	$(VCC) $(VCC_FLAGS) tag_3_tb.vhd
+	$(VELAB) $(VELAB_FLAGS) tag_3_tb
+	@touch tag_3_tb~
+
+.PHONY: tag_3_tb
+tag_3_tb: tag_3_tb~
+
+tag_3~ : cache_cell~ 
+	$(VCC) $(VCC_FLAGS) tag_3.vhd
+	@touch tag_3~
+
+.PHONY: tag_3
+tag_3: tag_3~
+
 cache_cell_tb~ : cache_cell~ 
 	$(VCC) $(VCC_FLAGS) cache_cell_tb.vhd
 	$(VELAB) $(VELAB_FLAGS) cache_cell_tb
