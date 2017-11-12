@@ -1,9 +1,10 @@
 ----------------------------------------------------------------------------------------------
 --
--- Entity: inverter_test
--- Architecture : vhdl
--- Author: cpatel2
--- Created On: 10/20/00 at 01:55
+-- Entity: cache_cell_tb
+-- Architecture : test
+-- Author: danielc3
+-- Created On: 11/11/2017
+-- Description: Testbench for writing and reading to a single cache cell
 --
 ----------------------------------------------------------------------------------------------
 
@@ -26,10 +27,16 @@ component cache_cell port (
     data_r  : out std_logic);
 end component;
 
-for cell_1 : cache_cellr use entity work.cache_cell(structural);
+constant CLK_PERIOD : time := 10 ns;
+
+for cell_1 : cache_cell use entity work.cache_cell(structural);
 
 signal clock : std_logic;
-signal enable_w, enable_r, data_w: std_logic;
+
+signal enable_w : std_logic := '0';
+signal enable_r : std_logic := '0';
+signal data_w : std_logic := '0';
+signal data_r : std_logic := '0';
 
 begin
 
@@ -38,24 +45,43 @@ begin
     clk : process
     begin  -- process clk
 
-        clock<='0','1' after 5 ns;
-        wait for 10 ns;
+        clock <= '0','1' after CLK_PERIOD / 2;
+        wait for CLK_PERIOD;
 
     end process clk;
 
-    io_process: process
-    begin
+    io: process
+    begin -- process io
 
-         enable_w <= 0;
-         enable_r <= 0;
-         data_w <= 0;
+        -- write 0 and read
+        wait for CLK_PERIOD;
+        enable_w <= '1';
 
-         wait for 10 ns;
+        wait for CLK_PERIOD;
+        enable_w <= '0';
 
-         enable_w <= 0;
-         enable_r <= 1;
-         data_w <= 0;
+        wait for CLK_PERIOD;
+        enable_r <= '1';
 
-    end process io_process;
+        wait for CLK_PERIOD;
+        enable_r <= '0';
+
+        -- write 1 and read
+        data_w <= '1';
+        wait for CLK_PERIOD;
+        enable_w <= '1';
+
+        wait for CLK_PERIOD;
+        enable_w <= '0';
+
+        wait for CLK_PERIOD;
+        enable_r <= '1';
+
+        wait for CLK_PERIOD;
+        enable_r <= '0';
+
+        wait; -- done
+
+    end process io;
 
 end test;
