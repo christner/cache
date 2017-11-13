@@ -16,19 +16,19 @@ use IEEE.std_logic_1164.all;
 entity cache_byte is port (
     enable_w: in std_logic;
     enable_r: in std_logic;
-    data_w  : in std_logic_vector( 7 downto 0);
-    data_r  : out std_logic_vector( 7 downto 0));
+    data_w  : in std_logic_vector( 7 downto 0 );
+    data_r  : out std_logic_vector( 7 downto 0 ));
 end cache_byte;
 
 architecture structural of cache_byte is
-component cache_cell port (
-    enable_w: in std_logic;
-    enable_r: in std_logic;
-    data_w  : in std_logic;
-    data_r  : out std_logic);
-end component;
+    component cache_cell port (
+        enable_w: in std_logic;
+        enable_r: in std_logic;
+        data_w  : in std_logic;
+        data_r  : out std_logic);
+    end component;
 
-for bit_0, bit_1, bit_2, bit_3, bit_4, bit_5, bit_6, bit_7 : cache_cell use entity work.cache_cell(structural);
+    for bit_0, bit_1, bit_2, bit_3, bit_4, bit_5, bit_6, bit_7 : cache_cell use entity work.cache_cell(structural);
 
 begin
 
