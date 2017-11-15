@@ -21,7 +21,7 @@ entity cache_block is port (
 end cache_block;
 
 architecture structural of cache_block is
-    component or4 port (
+    component or_4 port (
         input1: in std_logic;
         input2: in std_logic;
         input3: in std_logic;
@@ -29,7 +29,7 @@ architecture structural of cache_block is
         output: out std_logic);
     end component;
 
-    component and4 port (
+    component and_4 port (
         input1: in std_logic;
         input2: in std_logic;
         input3: in std_logic;
@@ -58,8 +58,8 @@ architecture structural of cache_block is
         data_r  : out std_logic_vector( 7 downto 0 ));
     end component;
 
-    for or4_0 : or4 use entity work.or4(structural);
-    for and4_0 : and4 use entity work.and4(structural);
+    for or4_0 : or_4 use entity work.or_4(structural);
+    for and4_0 : and_4 use entity work.and_4(structural);
     for valid_0 : cache_cell use entity work.cache_cell(structural);
     for tag_0 : tag use entity work.tag(structural);
     for byte_0, byte_1, byte_2, byte_3 : cache_byte use entity work.cache_byte(structural);
@@ -70,11 +70,11 @@ architecture structural of cache_block is
 begin
 
     -- we will read if even one of our cells are enabled
-    or4_0: or4 port map (enable_r(0), enable_r(1), enable_r(2), enable_r(3), reading);
+    or4_0: or_4 port map (enable_r(0), enable_r(1), enable_r(2), enable_r(3), reading);
 
     -- we will overwrite our tag and valid bit only if we are writing all 4 bytes (i.e.
     -- after fetching from memory)
-    and4_0: and4 port map (enable_w(0), enable_w(1), enable_w(2), enable_w(3), overwrite);
+    and4_0: and_4 port map (enable_w(0), enable_w(1), enable_w(2), enable_w(3), overwrite);
 
     valid_0: cache_cell port map (overwrite, reading, data_w(35), data_r(35));
 
