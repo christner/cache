@@ -13,15 +13,15 @@ library IEEE;
 
 use IEEE.std_logic_1164.all;
 
-entity or4 is port (
+entity or_4 is port (
     input1   : in  std_logic;
     input2   : in  std_logic;
     input3   : in  std_logic;
     input4   : in  std_logic;
     output   : out std_logic);
-end or4;
+end or_4;
 
-architecture structural of or4 is
+architecture structural of or_4 is
 begin
 
   output <= input4 or input3 or input2 or input1;

@@ -4,7 +4,7 @@
 -- Architecture : structural
 -- Author: cpatel2
 -- Created On: 11/11/2003
--- Description: 
+-- Description:
 --
 ----------------------------------------------------------------------------------------------------
 
@@ -13,13 +13,13 @@ library IEEE;
 
 use IEEE.std_logic_1164.all;
 
-entity xor2 is port (
+entity xor_2 is port (
     input1   : in  std_logic;
     input2   : in  std_logic;
     output   : out std_logic);
-end xor2;
+end xor_2;
 
-architecture structural of xor2 is
+architecture structural of xor_2 is
 begin
 
   output <= input2 xor input1;
