@@ -17,6 +17,7 @@ entity jkff is port (
     J   : in  std_logic;
     K   : in  std_logic;
     Clk : in  std_logic;
+    rst : in  std_logic;
     Q   : out std_logic);
 end jkff;
 
@@ -28,7 +29,9 @@ begin
   Q <= temp;
   jk_flipflop: process (J, K, Clk)
   begin
-    if  falling_edge(Clk) then
+    if (rst = '1') then
+      temp <= '0';
+    elsif  falling_edge(Clk) then
      if    (J='0' and K='0') then
        temp <= temp;
      elsif (J='0' and K='1') then
