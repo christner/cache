@@ -25,10 +25,11 @@ end cache_block_tb;
 architecture test of cache_block_tb is
 
     component cache_block port (
-        enable_w: in std_logic_vector( 3 downto 0 );
-        enable_r: in std_logic_vector( 3 downto 0 );
-        data_w  : in std_logic_vector( 35 downto 0 );
-        data_r  : out std_logic_vector( 35 downto 0 ));
+        enable_blk: in std_logic;
+        enable_w  : in std_logic_vector( 3 downto 0 );
+        enable_r  : in std_logic_vector( 3 downto 0 );
+        data_w    : in std_logic_vector( 35 downto 0 );
+        data_r    : out std_logic_vector( 35 downto 0 ));
     end component;
 
     constant CLK_PERIOD : time := 10 ns;
@@ -42,12 +43,13 @@ architecture test of cache_block_tb is
     signal data_w : std_logic_vector( 35 downto 0 ) := ( others => '0' );
     signal data_r : std_logic_vector( 35 downto 0 ) := ( others => '0' );
 
-    signal tmp : std_logic_vector( 35 downto 0 ) := ( others => '0' );
+    -- TODO: Verify enable block works as expected (i.e vary it as well)
+    signal enable_blk : std_logic := '1';
 
 begin
 
     -- map inputs and ouputs
-    block_0 : cache_block port map (enable_w(3 downto 0), enable_r(3 downto 0), data_w(35 downto 0), data_r(35 downto 0));
+    block_0 : cache_block port map (enable_blk, enable_w(3 downto 0), enable_r(3 downto 0), data_w(35 downto 0), data_r(35 downto 0));
 
     clk : process
     begin  -- process clk
