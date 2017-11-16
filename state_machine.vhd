@@ -10,6 +10,7 @@ entity state_machine is port (
   CLOCK : in std_logic;
   BUSY : out std_logic;
   CacheEnable : out std_logic;
+  WriteEntireBlk : out std_logic;
   MemEnable : out std_logic
 ); end state_machine;
 
@@ -90,10 +91,10 @@ output: out std_logic
 ); end component;
 
 for and1, and2, and3, and4, and5, and6, and7, and8, and9, and10, and11, and12: and_2 use entity work.and_2(structural);
-for and_3_1, and_3_2: and_3 use entity work.and_3(structural);
+for and_3_1, and_3_2, wblk2: and_3 use entity work.and_3(structural);
 for or1, or2, or3, or4, or5, or6, or7, or8, or9, or10 : or_2 use entity work.or_2(structural);
 for nand1, nand2, nand3, nand4 : nand_2 use entity work.nand_2(structural);
-for inv1, inv2, inv3 : inverter use entity work.inverter(structural);
+for inv1, inv2, inv3, wblk1 : inverter use entity work.inverter(structural);
 for ffA, ffB, ffC : jkff use entity work.jkff(structural);
 for dl1, dl2, dl3 : dlatch use entity work.dlatch(structural);
 
@@ -113,6 +114,7 @@ for andready : and_4 use entity work.and_4(structural);
 for waitTime0 : or_2 use entity work.or_2(structural);
 for waitTime3, waitTime0a : inverter use entity work.inverter(structural);
 
+signal wb0 : std_logic;
 
 signal Ja_o, Ja1, Ja2, Ja3, Ja4 : std_logic;
 signal Ka_o, Ka1, Ka2 : std_logic;
@@ -225,6 +227,17 @@ begin
   waitTime0: or_2 port map (currstate(1), currstate(0), wt3);
   waitTime0a: inverter port map (currstate(2), wt3);
   waitTime0b: and_2 port map (wt3, wt4, waitTime(0));
+
+  wblk1 : inverter port map (currstate(1), wb0);
+  wblk2 : and_3 port map (currstate(2), wb0, currstate(0), WriteEntireBlk);
+
+
+
+
+
+
+
+
 
 
 end structural;
