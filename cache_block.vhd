@@ -17,11 +17,15 @@ entity cache_block is port (
     enable_blk: in std_logic;
     enable_w: in std_logic_vector( 3 downto 0 );
     enable_r: in std_logic_vector( 3 downto 0 );
-    data_w  : in std_logic_vector( 35 downto 0);
-    data_r  : out std_logic_vector( 35 downto 0));
+    tag_w   : in std_logic_vector( 2 downto 0 );
+    data_w  : in std_logic_vector( 31 downto 0 );
+    valid_r : out std_logic;
+    tag_r   : out std_logic_vector( 2 downto 0 );
+    data_r  : out std_logic_vector( 31 downto 0 ));
 end cache_block;
 
 architecture structural of cache_block is
+
     component and_2 port (
         input1: in std_logic;
         input2: in std_logic;
@@ -54,14 +58,14 @@ architecture structural of cache_block is
     component tag port (
         enable_w: in std_logic;
         enable_r: in std_logic;
-        data_w  : in std_logic_vector( 2 downto 0);
+        data_w  : in std_logic_vector( 2 downto 0 );
         data_r  : out std_logic_vector( 2 downto 0 ));
     end component;
 
     component cache_byte port (
         enable_w: in std_logic;
         enable_r: in std_logic;
-        data_w  : in std_logic_vector( 7 downto 0);
+        data_w  : in std_logic_vector( 7 downto 0 );
         data_r  : out std_logic_vector( 7 downto 0 ));
     end component;
 
@@ -73,9 +77,9 @@ architecture structural of cache_block is
     for tag_0 : tag use entity work.tag(structural);
     for byte_0, byte_1, byte_2, byte_3 : cache_byte use entity work.cache_byte(structural);
 
-    signal reading : std_logic := '0';
-    signal overwrite : std_logic := '0';
-    signal valid : std_logic := '1';
+    signal reading : std_logic;
+    signal overwrite : std_logic;
+    signal valid_c : std_logic := '1'; -- constant, tying to vdd
 
     signal tmp_enable_r_0, tmp_enable_r_1, tmp_enable_r_2, tmp_enable_r_3 : std_logic;
     signal tmp_enable_w_0, tmp_enable_w_1, tmp_enable_w_2, tmp_enable_w_3 : std_logic;
@@ -102,12 +106,11 @@ begin
     and_4_0: and_4 port map (tmp_enable_w_0, tmp_enable_w_1, tmp_enable_w_2, tmp_enable_w_3, overwrite);
 
     -- if we are writing the entire block, we can mark it as valid
-    -- TODO: Make sure this initializes as '0'
-    valid_0: cache_cell port map (overwrite, reading, valid, valid);
+    valid_0: cache_cell port map (overwrite, reading, valid_c, valid_r);
 
     -- if we are writing the entire block, we need to update the tag, when we read,
     -- we always want to grab the tag as well
-    tag_0  : tag port map (overwrite, reading, data_w(34 downto 32), data_r(34 downto 32));
+    tag_0  : tag port map (overwrite, reading, tag_w(2 downto 0), tag_r(2 downto 0));
 
     -- read/write to selected cache bytes
     byte_0 : cache_byte port map (enable_w(0), enable_r(0), data_w(31 downto 24), data_r(31 downto 24));

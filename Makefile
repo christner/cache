@@ -15,7 +15,7 @@ cache_set_tb~ : cache_set
 cache_set_tb : cache_set_tb~
 
 cache_set~ : inverter and_2 or_2 and_3 cache_block
-	$(VCC) $(VCC_FLAGS) cache_block.vhd
+	$(VCC) $(VCC_FLAGS) cache_set.vhd
 	@touch cache_set~
 
 .PHONY : cache_set
