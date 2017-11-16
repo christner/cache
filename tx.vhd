@@ -3,29 +3,29 @@
 -- Entity: tx
 -- Architecture : structural
 -- Author: cpatel2
--- Created On: 
--- Description: 
+-- Created On:
+-- Description: transmission gate
 --
 ---------------------------------------------------------------------------------------------
-  
+
 library STD;
-library IEEE;                      
+library IEEE;
 
-use IEEE.std_logic_1164.all;       
+use IEEE.std_logic_1164.all;
 
-entity tx is port ( 
+entity tx is port (
     sel   : in std_logic;
     selnot: in std_logic;
     input : in std_logic;
     output:out std_logic);
-end tx;                          
+end tx;
 
-architecture structural of tx is 
+architecture structural of tx is
 begin
-	
-  txprocess: process (sel, selnot, input)                 
-  begin                           
-    if (sel = '1' and selnot = '0') 
+
+  txprocess: process (sel, selnot, input)
+  begin
+    if (sel = '1' and selnot = '0')
     then
 
       output <= input;
@@ -35,8 +35,8 @@ begin
       output <= 'Z';
 
     end if;
-  end process txprocess;        
- 
+  end process txprocess;
+
 end structural;
 
 ---------------------------------------------------------------------------------------------

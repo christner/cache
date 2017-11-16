@@ -90,10 +90,17 @@ inverter : inverter~
 
 dlatch~ :
 	$(VCC) $(VCC_FLAGS) dlatch.vhd
-	@touch inverter~
+	@touch dlatch~
 
 .PHONY : dlatch
 dlatch : dlatch~
+
+comparator_3~ : and_4 xnor_2
+	$(VCC) $(VCC_FLAGS) comparator_3.vhd
+	@touch comparator_3~
+
+.PHONY : comparator_3
+comparator_3 : comparator_3~
 
 tx~ :
 	$(VCC) $(VCC_FLAGS) tx.vhd

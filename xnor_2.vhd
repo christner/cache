@@ -3,7 +3,7 @@
 -- Entity: xnor_2
 -- Architecture : structural
 -- Author: katieb5/danielc3
--- Created On: 11/11/2017
+-- Created On: 11/15/2017
 -- Description: 2 input xnor gate
 --
 ----------------------------------------------------------------------------------------------------
