@@ -4,8 +4,24 @@ VELAB		= run_ncelab.bash
 VELAB_FLAGS	= -message -access rwc
 
 .PHONY : all
-all : cache_cell_tb tag_3_tb cache_byte_tb cache_block_tb cache_set_tb
+all : cache_cell_tb tag_3_tb cache_byte_tb cache_block_tb cache_set_tb set_associative_cache_2_tb
 
+set_associative_cache_2_tb~ : set_associative_cache_2
+	$(VCC) $(VCC_FLAGS) set_associatice_cache_2_tb.vhd
+	$(VELAB) $(VELAB_FLAGS) set_associative_cache_tb
+	@touch set_associative_cache_2_tb~
+
+.PHONY : set_associative_cache_2_tb
+set_associative_cache_2_tb : set_associative_cache_2_tb~
+
+set_associative_cache_2~ : and_2 or_2 comparator_3 cache_set
+	$(VCC) $(VCC_FLAGS) set_associative_cache_2.vhd
+	@touch set_associative_cache_2~
+
+.PHONY : set_associative_cache_2
+set_associative_cache_2 : set_associative_cache_2~
+
+#
 cache_set_tb~ : cache_set
 	$(VCC) $(VCC_FLAGS) cache_set_tb.vhd
 	$(VELAB) $(VELAB_FLAGS) cache_set_tb
