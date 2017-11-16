@@ -109,7 +109,7 @@ and_%~  :
 
 .PHONY : and_%
 and_% : and_%~
-	@echo $@
+	@echo -n
 
 .PRECIOUS : or_%~
 or_%~ :
@@ -118,7 +118,25 @@ or_%~ :
 
 .PHONY : or_%
 or_% : or_%~
-	@echo $@
+	@echo -n
+
+.PRECIOUS : xnor_%~
+xnor_%~ : xor_%
+	$(VCC) $(subst ~,,$@).vhd
+	@touch $@
+
+.PHONY : xnor_%
+xnor_% : xnor_%~
+	@echo -n
+
+.PRECIOUS : xor_%~
+xor_%~ :
+	$(VCC) $(subst ~,,$@).vhd
+	@touch $@
+
+.PHONY : xor_%
+xor_% : xor_%~
+	@echo -n
 
 .PHONY : clean
 clean :
