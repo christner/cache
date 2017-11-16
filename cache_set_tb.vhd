@@ -25,10 +25,13 @@ end cache_set_tb;
 architecture test of cache_set_tb is
 
     component cache_set port (
-        enable_w: in std_logic_vector( 3 downto 0 );
-        enable_r: in std_logic_vector( 3 downto 0 );
-        data_w  : in std_logic_vector( 35 downto 0 );
-        data_r  : out std_logic_vector( 35 downto 0 ));
+        write_whole_blk: in std_logic;
+        w_r            : in std_logic;
+        address        : in std_logic_vector( 4 downto 0 );
+        data_w         : in std_logic_vector( 31 downto 0 );
+        valid_r        : out std_logic;
+        tag_r          : out std_logic_vector( 2 downto 0 );
+        data_r         : out std_logic_vector( 31 downto 0 ));
     end component;
 
     constant CLK_PERIOD : time := 10 ns;
@@ -36,16 +39,18 @@ architecture test of cache_set_tb is
     for set_0 : cache_set use entity work.cache_set(structural);
 
     signal clock : std_logic;
-    signal enable_w : std_logic_vector( 3 downto 0 ) := ( others => '0' );
-    signal enable_r : std_logic_vector( 3 downto 0 ) := ( others => '0' );
+    signal write_whole_blk, w_r : std_logic := '0';
+    signal address : std_logic_vector( 4 downto 0 ) := ( others => '0' );
+    signal data_w : std_logic_vector( 31 downto 0 ) := ( others => '0' );
 
-    signal data_w : std_logic_vector( 35 downto 0 ) := ( others => '0' );
-    signal data_r : std_logic_vector( 35 downto 0 ) := ( others => '0' );
+    signal valid_r : std_logic := '0';
+    signal tag_r : std_logic_vector( 2 downto 0 )  := ( others => '0' );
+    signal data_r : std_logic_vector( 31 downto 0 ) := ( others => '0' );
 
 begin
 
     -- map inputs and ouputs
-    set_0 : cache_set port map (enable_w(3 downto 0), enable_r(3 downto 0), data_w(35 downto 0), data_r(35 downto 0));
+    set_0 : cache_set port map (write_whole_blk, w_r, address(4 downto 0), data_w(31 downto 0), valid_r, tag_r(2 downto 0), data_r(31 downto 0));
 
     clk : process
     begin  -- process clk
@@ -57,21 +62,6 @@ begin
 
     io: process
     begin -- process io
-
-        for i in 0 to 35 loop
-            data_w <= std_logic_vector(shift_left(signed(data_w), 1));
-            data_w(0) <= '1';
-
-            wait for CLK_PERIOD;
-            enable_w <= (others => '1'); -- write value entire block (overwrite)
-            wait for CLK_PERIOD;
-            enable_w <= (others => '0');
-            wait for CLK_PERIOD;
-            enable_r <= (others => '1'); -- read value from block
-            wait for CLK_PERIOD;
-            enable_r <= (others => '0');
-
-        end loop;
 
         wait; -- done
 
