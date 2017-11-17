@@ -30,7 +30,7 @@ cache_set_tb~ : cache_set
 .PHONY : cache_set_tb
 cache_set_tb : cache_set_tb~
 
-cache_set~ : inverter and_2 or_2 and_3 cache_block
+cache_set~ : inverter or_2 and_2 decoder_2 decoder_3 cache_block
 	$(VCC) $(VCC_FLAGS) cache_set.vhd
 	@touch cache_set~
 
@@ -96,6 +96,20 @@ cache_cell~ : tx inverter dlatch
 
 .PHONY : cache_cell
 cache_cell : cache_cell~
+
+decoder_3~ : inverter and_3
+	$(VCC) $(VCC_FLAGS) decoder_3.vhd
+	@touch decoder_3~
+
+.PHONY : decoder_3
+decoder_3 : decoder_3~
+
+decoder_2~ : inverter and_2
+	$(VCC) $(VCC_FLAGS) decoder_2.vhd
+	@touch decoder_2~
+
+.PHONY : decoder_2
+decoder_2 : decoder_2~
 
 inverter~ :
 	$(VCC) $(VCC_FLAGS) inverter.vhd

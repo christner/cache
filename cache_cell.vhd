@@ -22,34 +22,35 @@ end cache_cell;
 
 architecture structural of cache_cell is
 
-component dlatch port (
-    d   : in  std_logic;
-    clk : in  std_logic;
-    q   : out std_logic;
-    qbar: out std_logic);
-end component;
+    component inverter port (
+        input : in  std_logic;
+        output: out std_logic);
+    end component;
 
-component inverter port (
-    input : in  std_logic;
-    output: out std_logic);
-end component;
+    component dlatch port (
+        d   : in  std_logic;
+        clk : in  std_logic;
+        q   : out std_logic;
+        qbar: out std_logic);
+    end component;
 
-component tx port (
-    sel   : in std_logic;
-    selnot: in std_logic;
-    input : in std_logic;
-    output:out std_logic);
-end component;
+    component tx port (
+        sel   : in std_logic;
+        selnot: in std_logic;
+        input : in std_logic;
+        output:out std_logic);
+    end component;
 
-for latch_1: dlatch use entity work.dlatch(structural);
-for inv_1: inverter use entity work.inverter(structural);
-for tx_1: tx use entity work.tx(structural);
+    for latch_1: dlatch use entity work.dlatch(structural);
+    for inverter_1: inverter use entity work.inverter(structural);
+    for tx_1: tx use entity work.tx(structural);
 
-signal enable_r_not, q, qbar: std_logic;
+    signal enable_r_not, q, qbar: std_logic;
+
 begin
 
     latch_1: dlatch port map (data_w, enable_w, q, qbar);
-    inv_1: inverter port map (enable_r, enable_r_not);
+    inverter_1: inverter port map (enable_r, enable_r_not);
     tx_1: tx port map (enable_r, enable_r_not, q, data_r);
 
 end structural;
