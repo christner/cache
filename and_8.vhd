@@ -13,7 +13,7 @@ library IEEE;
 
 use IEEE.std_logic_1164.all;
 
-entity and8 is port (
+entity and_8 is port (
     input1: in  std_logic;
     input2: in  std_logic;
     input3: in  std_logic;
@@ -23,9 +23,9 @@ entity and8 is port (
     input7: in  std_logic;
     input8: in  std_logic;
     output: out std_logic);
-end and8;
+end and_8;
 
-architecture structural of and8 is
+architecture structural of and_8 is
 begin
 
 output <= input8 and input7 and input6 and input5 and input4 and input3 and input2 and input1;
