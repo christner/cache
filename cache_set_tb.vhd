@@ -26,13 +26,12 @@ architecture test of cache_set_tb is
 
     component cache_set port (
         enable_set     : in std_logic;
-        write_whole_blk: in std_logic;
         w_r            : in std_logic;
         address        : in std_logic_vector( 4 downto 0 );
-        data_w         : in std_logic_vector( 31 downto 0 );
+        data_w         : in std_logic_vector( 7 downto 0 );
         valid_r        : out std_logic;
         tag_r          : out std_logic_vector( 2 downto 0 );
-        data_r         : out std_logic_vector( 31 downto 0 ));
+        data_r         : out std_logic_vector( 7 downto 0 ));
     end component;
 
     constant CLK_PERIOD : time := 10 ns;
@@ -40,7 +39,7 @@ architecture test of cache_set_tb is
     for set_0 : cache_set use entity work.cache_set(structural);
 
     signal clock : std_logic;
-    signal enable_set, write_whole_blk, w_r : std_logic := '0';
+    signal enable_set, w_r : std_logic := '0';
     signal address : std_logic_vector( 4 downto 0 ) := ( others => '0' );
     signal data_w : std_logic_vector( 31 downto 0 ) := ( others => '0' );
 
@@ -51,7 +50,7 @@ architecture test of cache_set_tb is
 begin
 
     -- map inputs and ouputs
-    set_0 : cache_set port map (enable_set, write_whole_blk, w_r, address(4 downto 0), data_w(31 downto 0), valid_r, tag_r(2 downto 0), data_r(31 downto 0));
+    set_0 : cache_set port map (enable_set, w_r, address(4 downto 0), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
 
     clk : process
     begin  -- process clk
