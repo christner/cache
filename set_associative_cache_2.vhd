@@ -170,7 +170,7 @@ begin
     -- if one of the tags is a hit and is valid, we hit, otherwise, miss
     or_2_0 : or_2 port map (tmp_teq_v1, tmp_teq_v1, tmp_hit_miss);
 
-    hit_miss <= tmp_hit_miss; -- TODO: Ask Dr. Patel about this
+    hit_miss <= tmp_hit_miss; -- TODO: add dlatch
 
     -- need to and each blk with hit miss to decide which lru to use
     and_2_lru_e0 : and_2 port map (tmp_blk(0), tmp_hit_miss, tmp_lru_we(0));

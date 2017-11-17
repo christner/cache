@@ -108,6 +108,7 @@ begin
     -- if we are writing the entire block, we can mark it as valid
     valid_0: cache_cell port map (overwrite, reading, valid_c, valid_r);
 
+    -- TODO: fix this, more more entire block logic
     -- if we are writing the entire block, we need to update the tag, when we read,
     -- we always want to grab the tag as well
     tag_0  : tag port map (overwrite, reading, tag_w(2 downto 0), tag_r(2 downto 0));

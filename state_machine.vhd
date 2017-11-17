@@ -10,7 +10,6 @@ entity state_machine is port (
   CLOCK : in std_logic;
   BUSY : out std_logic;
   CacheEnable : out std_logic;
-  WriteEntireBlk : out std_logic;
   MemEnable : out std_logic
 ); end state_machine;
 
@@ -261,18 +260,5 @@ begin
   waitTime0a: inverter port map (currstate(2), wt4);
   waitTime0b: and_2 port map (wt3, wt4, waitTime(0));
   -- End counter logic
-
-  -- WriteEntireBlk signal
-  wblk1 : inverter port map (currstate(1), wb0);
-  wblk2 : and_3 port map (currstate(2), wb0, currstate(0), WriteEntireBlk);
-
-
-
-
-
-
-
-
-
 
 end structural;

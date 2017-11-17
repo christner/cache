@@ -15,7 +15,6 @@ use IEEE.std_logic_1164.all;
 
 entity cache_set is port (
     enable_set     : in std_logic;
-    write_whole_blk: in std_logic;
     w_r            : in std_logic;
     address        : in std_logic_vector( 4 downto 0 );
     data_w         : in std_logic_vector( 31 downto 0 );
@@ -104,12 +103,6 @@ begin
     and_2_we1 : and_2 port map (tmp_byte_e(1), w_r, tmp_we(1));
     and_2_we2 : and_2 port map (tmp_byte_e(2), w_r, tmp_we(2));
     and_2_we3 : and_2 port map (tmp_byte_e(3), w_r, tmp_we(2));
-
-    -- if we are writing the whole block, tick all the blocks
-    or_2_we0 : or_2 port map (tmp_we(0), write_whole_blk, we(0));
-    or_2_we1 : or_2 port map (tmp_we(1), write_whole_blk, we(1));
-    or_2_we2 : or_2 port map (tmp_we(2), write_whole_blk, we(2));
-    or_2_we3 : or_2 port map (tmp_we(3), write_whole_blk, we(3));
 
     -- while reading and writing are mutually exclusive, simply because aren't
     -- writing a byte doesn't mean we are reading, so we can't just invert the
