@@ -56,9 +56,7 @@ input2 : in std_logic;
 input3 : in std_logic;
 output : out std_logic
 ); end component;
--- TODO:
-  -- need to latch nextstate to currstate
-  -- handle "wait" state
+
 component xor_2 port (
 input1 : in std_logic;
 input2 : in std_logic;
@@ -110,6 +108,14 @@ input : in std_logic;
 output: out std_logic
 ); end component;
 
+component WaitCounter port (
+currstate : in std_logic_vector(2 downto 0);
+nextstate : in std_logic_vector(2 downto 0);
+clk : in std_logic;
+reset : in std_logic;
+Ready : out std_logic
+); end component;
+
 for and2, and3, and4, and5, and6, and7, and11, and12: and_2 use entity work.and_2(structural);
 for wblk2, and3_jc, and3_jc1, and3_jc2: and_3 use entity work.and_3(structural);
 for and4_1 : and_4 use entity work.and_4(structural);
@@ -135,7 +141,7 @@ for waitTime2, invc1, invc2, invc3 : inverter use entity work.inverter(structura
 for waitTime3, waitTime0a, invclock : inverter use entity work.inverter(structural);
 
 for nor1, nor2, nor3, nor5, nor6 : nor_2 use entity work.nor_2(structural);
-
+for waitCounter_0 : waitCounter use entity work.waitCounter(structural);
 signal wb0,b1 : std_logic;
 
 signal Ja_o, Ja1, Ja2, Ja3, Ja4, Ja5, Ja6 : std_logic;
@@ -147,17 +153,17 @@ signal Kc_o, Kc1, Kc2, Kc3, Kc4 : std_logic;
 signal currstate, nextstate : std_logic_vector(2 downto 0);
 signal w2, w3 : std_logic;
 
-signal counterReset : std_logic;
+--signal counterReset : std_logic;
 signal Ready : std_logic;
-signal waitTime : std_logic_vector(3 downto 0);
-signal c_xor_n_1, c_xor_n_2, c_xor_n_3, c_or_n, notabc : std_logic;
-signal c1, c2, c3 : std_logic;
-signal outq1, outq2, outq3, outq4 : std_logic;
-signal ready1, ready2, ready3, ready4 : std_logic;
-signal wt1, wt2, wt3, wt4 : std_logic;
+--signal waitTime : std_logic_vector(3 downto 0);
+--signal c_xor_n_1, c_xor_n_2, c_xor_n_3, c_or_n, notabc : std_logic;
+--signal c1, c2, c3 : std_logic;
+--signal outq1, outq2, outq3, outq4 : std_logic;
+--signal ready1, ready2, ready3, ready4 : std_logic;
+--signal wt1, wt2, wt3, wt4 : std_logic;
 signal one : std_logic := '1';
 signal zero : std_logic := '0';
-signal invclk : std_logic;
+--signal invclk : std_logic;
 begin
   -- CacheEnable Signal
   nor5 : nor_2 port map (currstate(2), currstate(0), CacheEnable);
@@ -228,37 +234,39 @@ begin
   dl2 : dlatch port map (nextstate(1), CLOCK, currstate(1));
   dl3 : dlatch port map (nextstate(0), CLOCK, currstate(0));
 
-  -- Set counterReset
-  invclock : inverter port map (CLOCK, invclk);
-  invc1 : inverter port map (currstate(0), c1);
-  invc2 : inverter port map (currstate(1), c2);
-  invc3 : inverter port map (currstate(2), c3);
-  and_crst : and_3 port map (c1, c2, c3, notabc);
-  xor_crst1 : xor_2 port map (currstate(0), nextstate(0), c_xor_n_1);
-  xor_crst2 : xor_2 port map (currstate(1), nextstate(1), c_xor_n_2);
-  xor_crst3 : xor_2 port map (currstate(2), nextstate(2), c_xor_n_3);
-  or_crst : or_3 port map (c_xor_n_1, c_xor_n_2, c_xor_n_3, c_or_n);
-  or_crst_o : or_3 port map (notabc, RESET, c_or_n, counterReset);
 
-  counter1 : jkff port map (one, one, invclk, counterReset, outq1);
-  counter2 : jkff port map (one, one, outq1, counterReset, outq2);
-  counter3 : jkff port map (one, one, outq2, counterReset, outq3);
-  counter4 : jkff port map (one, one, outq3, counterReset, outq4);
-
-  xnorrdy1 : xnor_2 port map (outq4, waitTime(3), ready1);
-  xnorrdy2 : xnor_2 port map (outq3, zero, ready2);
-  xnorrdy3 : xnor_2 port map (outq2, waitTime(1), ready3);
-  xnorrdy4 : xnor_2 port map (outq1, waitTime(0), ready4);
-
-  andready : and_4 port map (ready1, ready2, ready3, ready4, Ready);
-
-  waitTime3 : inverter port map (currstate(1), wt1);
-  waitTime3a: and_2 port map (currstate(2), wt1, waitTime(3));
-  waitTime2: inverter port map (one, waitTime(2));
-  waitTime1: and_2 port map (currstate(2), currstate(1), waitTime(1));
-  waitTime0: or_2 port map (currstate(1), currstate(0), wt3);
-  waitTime0a: inverter port map (currstate(2), wt4);
-  waitTime0b: and_2 port map (wt3, wt4, waitTime(0));
-  -- End counter logic
+  waitCounter_0 : waitCounter port map (currstate(2 downto 0), nextstate(2 downto 0), CLOCK, RESET, Ready);
+  -- -- Set counterReset
+  -- invclock : inverter port map (CLOCK, invclk);
+  -- invc1 : inverter port map (currstate(0), c1);
+  -- invc2 : inverter port map (currstate(1), c2);
+  -- invc3 : inverter port map (currstate(2), c3);
+  -- and_crst : and_3 port map (c1, c2, c3, notabc);
+  -- xor_crst1 : xor_2 port map (currstate(0), nextstate(0), c_xor_n_1);
+  -- xor_crst2 : xor_2 port map (currstate(1), nextstate(1), c_xor_n_2);
+  -- xor_crst3 : xor_2 port map (currstate(2), nextstate(2), c_xor_n_3);
+  -- or_crst : or_3 port map (c_xor_n_1, c_xor_n_2, c_xor_n_3, c_or_n);
+  -- or_crst_o : or_3 port map (notabc, RESET, c_or_n, counterReset);
+  --
+  -- counter1 : jkff port map (one, one, invclk, counterReset, outq1);
+  -- counter2 : jkff port map (one, one, outq1, counterReset, outq2);
+  -- counter3 : jkff port map (one, one, outq2, counterReset, outq3);
+  -- counter4 : jkff port map (one, one, outq3, counterReset, outq4);
+  --
+  -- xnorrdy1 : xnor_2 port map (outq4, waitTime(3), ready1);
+  -- xnorrdy2 : xnor_2 port map (outq3, zero, ready2);
+  -- xnorrdy3 : xnor_2 port map (outq2, waitTime(1), ready3);
+  -- xnorrdy4 : xnor_2 port map (outq1, waitTime(0), ready4);
+  --
+  -- andready : and_4 port map (ready1, ready2, ready3, ready4, Ready);
+  --
+  -- waitTime3 : inverter port map (currstate(1), wt1);
+  -- waitTime3a: and_2 port map (currstate(2), wt1, waitTime(3));
+  -- waitTime2: inverter port map (one, waitTime(2));
+  -- waitTime1: and_2 port map (currstate(2), currstate(1), waitTime(1));
+  -- waitTime0: or_2 port map (currstate(1), currstate(0), wt3);
+  -- waitTime0a: inverter port map (currstate(2), wt4);
+  -- waitTime0b: and_2 port map (wt3, wt4, waitTime(0));
+  -- -- End counter logic
 
 end structural;

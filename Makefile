@@ -1,5 +1,5 @@
 VCC		= run_ncvhdl.bash
-VCC_FLAGS	= -messages -linedebug -smartorder 
+VCC_FLAGS	= -messages -linedebug -smartorder
 VELAB		= run_ncelab.bash
 VELAB_FLAGS	= -message -access rwc
 
@@ -45,7 +45,7 @@ cache_block_tb~ : cache_block
 .PHONY : cache_block_tb
 cache_block_tb : cache_block_tb~
 
-cache_block~ : and_2 and_4~ or_4 tag_3 cache_byte
+cache_block~ : and_2 and_4 or_4 tag_3 cache_byte cache_cell
 	$(VCC) $(VCC_FLAGS) cache_block.vhd
 	@touch cache_block~
 
@@ -60,7 +60,7 @@ cache_byte_tb~ : cache_byte
 .PHONY : cache_byte_tb
 cache_byte_tb : cache_byte_tb~
 
-cache_byte~ : cache_cell 
+cache_byte~ : cache_cell
 	$(VCC) $(VCC_FLAGS) cache_byte.vhd
 	@touch cache_byte~
 
