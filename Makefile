@@ -62,14 +62,14 @@ cache_block~ : and_2 and_4 or_4 tag_3 cache_byte cache_cell
 .PHONY : cache_clock
 cache_block : cache_block~
 
-state_machine~ : and_4~ and_3~ and_2~ or_4~ or_3~ or_2~ nand_2~ nand_3~ xor_2~ xnor_2~ jkff~ dlatch~ inverter~ nor_2~ and_5~
+state_machine~ : and_4 and_3 and_2 or_4 or_3 or_2 nand_2 nand_3 xor_2 xnor_2 jkff dlatch inverter nor_2 and_5 waitCounter
 	$(VCC) $(VCC_FLAGS) state_machine.vhd
 	@touch state_machine~
 
 .PHONY : state_machine
 state_machine : state_machine~
 
-waitCounter : and_2 and_3 and_4 xor_2 or_2 or_3 xnor_3 jkff inverter
+waitCounter : and_2 and_3 and_4 xor_2 or_2 or_3 xnor_2 jkff inverter
 	$(VCC) $(VCC_FLAGS) waitCounter.vhd
 	@touch waitCounter~
 
@@ -214,7 +214,7 @@ or_% : or_%~
 	@echo -n
 
 .PRECIOUS : xnor_%~
-xnor_%~ : xor_%
+xnor_%~ : xor_% inverter
 	$(VCC) $(subst ~,,$@).vhd
 	@touch $@
 
