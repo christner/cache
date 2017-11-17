@@ -111,11 +111,25 @@ decoder_2~ : inverter and_2
 .PHONY : decoder_2
 decoder_2 : decoder_2~
 
+and8_2~ :
+	$(VCC) $(VCC_FLAGS) and8_2.vhd
+	@touch and8_2~
+
+.PHONY : and8_2
+and8_1 : and8_2~
+
+inverter8_1~ :
+	$(VCC) $(VCC_FLAGS) inverter8_1.vhd
+	@touch inverter8_1~
+
+.PHONY : inverter8_1
+inverter8_1 : inverter8_1~
+
 inverter~ :
 	$(VCC) $(VCC_FLAGS) inverter.vhd
 	@touch inverter~
 
-.PHONY : inveter
+.PHONY : inverter
 inverter : inverter~
 
 dlatch~ :
