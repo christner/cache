@@ -17,9 +17,9 @@ entity set_associative_cache_2 is port (
     enable         : in std_logic;
     w_r            : in std_logic;
     address        : in std_logic_vector( 4 downto 0 );
-    data_w         : in std_logic_vector( 31 downto 0 );
+    data_w         : in std_logic_vector( 7 downto 0 );
     hit_miss       : out std_logic;
-    data_r         : out std_logic_vector( 31 downto 0 ));
+    data_r         : out std_logic_vector( 7 downto 0 ));
 end set_associative_cache_2;
 
 architecture structural of set_associative_cache_2 is
@@ -86,10 +86,10 @@ architecture structural of set_associative_cache_2 is
         enable_set     : in std_logic;
         w_r            : in std_logic;
         address        : in std_logic_vector( 4 downto 0 );
-        data_w         : in std_logic_vector( 31 downto 0 );
+        data_w         : in std_logic_vector( 7 downto 0 );
         valid_r        : out std_logic;
         tag_r          : out std_logic_vector( 2 downto 0 );
-        data_r         : out std_logic_vector( 31 downto 0 ));
+        data_r         : out std_logic_vector( 7 downto 0 ));
     end component;
 
     for inverter_0, inverter_1 : inverter use entity work.inverter(structural);
@@ -154,8 +154,8 @@ begin
     or_2_se1 : or_2 port map (tmp_se(1), tmp_r, se(1));
 
     -- map onto each set
-    cache_set_0 : cache_set port map (se(0), w_r, address(4 downto 0), data_w(31 downto 0), valid_out_0, tag_out_0(2 downto 0), data_r(31 downto 0));
-    cache_set_1 : cache_set port map (se(1), w_r, address(4 downto 0), data_w(31 downto 0), valid_out_1, tag_out_1(2 downto 0), data_r(31 downto 0));
+    cache_set_0 : cache_set port map (se(0), w_r, address(4 downto 0), data_w(7 downto 0), valid_out_0, tag_out_0(2 downto 0), data_r(7 downto 0));
+    cache_set_1 : cache_set port map (se(1), w_r, address(4 downto 0), data_w(7 downto 0), valid_out_1, tag_out_1(2 downto 0), data_r(7 downto 0));
 
     -- check if we have a tag match
     comparator_3_tag0 : comparator_3 port map (address(4 downto 2), tag_out_0(2 downto 0), tmp_tag_eq0);
