@@ -150,7 +150,7 @@ and8_2~ :
 	@touch and8_2~
 
 .PHONY : and8_2
-and8_1 : and8_2~
+and8_2 : and8_2~
 
 inverter8_1~ :
 	$(VCC) $(VCC_FLAGS) inverter8_1.vhd
