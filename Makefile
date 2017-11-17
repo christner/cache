@@ -14,7 +14,7 @@ set_associative_cache_2_tb~ : set_associative_cache_2
 .PHONY : set_associative_cache_2_tb
 set_associative_cache_2_tb : set_associative_cache_2_tb~
 
-set_associative_cache_2~ : and_2 or_2 comparator_3 cache_set
+set_associative_cache_2~ : inverter and_2 or_2 and_8 inverter8_1 and8_2 comparator_3 cache_set
 	$(VCC) $(VCC_FLAGS) set_associative_cache_2.vhd
 	@touch set_associative_cache_2~
 
