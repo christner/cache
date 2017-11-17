@@ -62,7 +62,7 @@ procedure print_output is
    write (out_line, string'(" Busy: "));
    write (out_line, busy);
    write (out_line, string'(" Memory  Enable: "));
-   write (out_line, mem_en);
+   write (out_line, memenable);
    writeline(output, out_line);
 
    write (out_line, string'(" ----------------------------------------------"));

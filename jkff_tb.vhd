@@ -14,16 +14,17 @@ architecture test of jkff_tb is
   J : in std_logic;
   K : in std_logic;
   Clk : in std_logic;
+  rst : in std_logic;
   Q : out std_logic
   ); end component;
 
   for jkff_1 : jkff use entity work.jkff(structural);
 
-  signal j_i, k_i, q_o : std_logic;
+  signal j_i, k_i, q_o, rst : std_logic;
   signal clock : std_logic;
 
   begin
-    jkff_1 : jkff port map (j_i, k_i, clock, q_o);
+    jkff_1 : jkff port map (j_i, k_i, clock, rst, q_o);
 
     clk : process
     begin
@@ -32,8 +33,10 @@ architecture test of jkff_tb is
     end process clk;
 
   test1: process begin
+    rst <= '1';
     wait until falling_edge(clock);
     wait for 2 ns;
+    rst <= '0';
     j_i <= '0';
     k_i <= '1';
     wait until falling_edge(clock);
@@ -47,7 +50,7 @@ architecture test of jkff_tb is
     j_i <= '0';
     k_i <= '0';
     wait until falling_edge(clock);
-    
+
     wait for 2 ns;
     j_i <= '1';
     k_i <= '1';
@@ -58,7 +61,11 @@ architecture test of jkff_tb is
     j_i <= '1';
     k_i <= '0';
     wait until falling_edge(clock);
+    rst <= '1';
+    wait until falling_edge(clock);
+    wait until falling_edge(clock);
     wait for 2 ns;
+    rst <= '0';
     j_i <= '0';
     k_i <= '1';
     wait until falling_edge(clock);
