@@ -14,6 +14,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity cache_set is port (
+    enable_set     : in std_logic;
     write_whole_blk: in std_logic;
     w_r            : in std_logic;
     address        : in std_logic_vector( 4 downto 0 );
@@ -81,7 +82,9 @@ architecture structural of cache_set is
     signal tmp_we : std_logic_vector( 7 downto 0 ); -- temporary write enable
     signal we : std_logic_vector( 7 downto 0 ); -- write enable
 
+    signal tmp_be : std_logic_vector( 7 downto 0 ); -- temporary lock enable
     signal be : std_logic_vector( 7 downto 0 ); -- block enable
+
     signal re : std_logic_vector( 7 downto 0 ); -- read enable
 
 begin
@@ -123,14 +126,25 @@ begin
     and_2_re3 : and_2 port map (tmp_byte3_e, tmp_r, re(2));
 
     -- next we need to decode which block we are enabling (upper 3 bits of address)
-    and_3_be0 : and_3 port map(tmp_not_2,   tmp_not_3,  tmp_not_4,  be(0));
-    and_3_be1 : and_3 port map(address(2),  tmp_not_3,  tmp_not_4,  be(1));
-    and_3_be2 : and_3 port map(tmp_not_2,   address(3), tmp_not_4,  be(2));
-    and_3_be3 : and_3 port map(address(2),  address(3), tmp_not_4,  be(3));
-    and_3_be4 : and_3 port map(tmp_not_2,   tmp_not_3,  address(4), be(4));
-    and_3_be5 : and_3 port map(address(2),  tmp_not_3,  address(4), be(5));
-    and_3_be6 : and_3 port map(tmp_not_2,   address(3), address(4), be(6));
-    and_3_be7 : and_3 port map(tmp_not_2,   tmp_not_3,  tmp_not_4,  be(7));
+    and_3_be0 : and_3 port map(tmp_not_2,   tmp_not_3,  tmp_not_4,  tmp_be(0));
+    and_3_be1 : and_3 port map(address(2),  tmp_not_3,  tmp_not_4,  tmp_be(1));
+    and_3_be2 : and_3 port map(tmp_not_2,   address(3), tmp_not_4,  tmp_be(2));
+    and_3_be3 : and_3 port map(address(2),  address(3), tmp_not_4,  tmp_be(3));
+    and_3_be4 : and_3 port map(tmp_not_2,   tmp_not_3,  address(4), tmp_be(4));
+    and_3_be5 : and_3 port map(address(2),  tmp_not_3,  address(4), tmp_be(5));
+    and_3_be6 : and_3 port map(tmp_not_2,   address(3), address(4), tmp_be(6));
+    and_3_be7 : and_3 port map(tmp_not_2,   tmp_not_3,  tmp_not_4,  tmp_be(7));
+
+    -- TODO: because I'm an idiot, I need to add an enable line for the entire set
+    -- and set enable signal with each block enable
+    and_2_be0 : and_2 port map(tmp_be(0), enable_set, be(0));
+    and_2_be1 : and_2 port map(tmp_be(1), enable_set, be(1));
+    and_2_be2 : and_2 port map(tmp_be(2), enable_set, be(2));
+    and_2_be3 : and_2 port map(tmp_be(3), enable_set, be(3));
+    and_2_be4 : and_2 port map(tmp_be(4), enable_set, be(4));
+    and_2_be5 : and_2 port map(tmp_be(5), enable_set, be(5));
+    and_2_be6 : and_2 port map(tmp_be(6), enable_set, be(6));
+    and_2_be7 : and_2 port map(tmp_be(7), enable_set, be(7));
 
     -- enable correct block and subset of bytes; write tag and data if write; retrive valid bit, tag, and  data if read
     block_0 : cache_block port map (be(0), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(31 downto 0), valid_r, tag_r(2 downto 0), data_r(31 downto 0));

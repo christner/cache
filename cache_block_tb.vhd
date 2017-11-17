@@ -26,10 +26,13 @@ architecture test of cache_block_tb is
 
     component cache_block port (
         enable_blk: in std_logic;
-        enable_w  : in std_logic_vector( 3 downto 0 );
-        enable_r  : in std_logic_vector( 3 downto 0 );
-        data_w    : in std_logic_vector( 35 downto 0 );
-        data_r    : out std_logic_vector( 35 downto 0 ));
+        enable_w: in std_logic_vector( 3 downto 0 );
+        enable_r: in std_logic_vector( 3 downto 0 );
+        tag_w   : in std_logic_vector( 2 downto 0 );
+        data_w  : in std_logic_vector( 31 downto 0 );
+        valid_r : out std_logic;
+        tag_r   : out std_logic_vector( 2 downto 0 );
+        data_r  : out std_logic_vector( 31 downto 0 ));
     end component;
 
     constant CLK_PERIOD : time := 10 ns;
@@ -37,19 +40,21 @@ architecture test of cache_block_tb is
     for block_0 : cache_block use entity work.cache_block(structural);
 
     signal clock : std_logic;
+    signal enable_blk : std_logic := '0';
     signal enable_w : std_logic_vector( 3 downto 0 ) := ( others => '0' );
     signal enable_r : std_logic_vector( 3 downto 0 ) := ( others => '0' );
 
-    signal data_w : std_logic_vector( 35 downto 0 ) := ( others => '0' );
-    signal data_r : std_logic_vector( 35 downto 0 ) := ( others => '0' );
+    signal tag_w : std_logic_vector( 2 downto 0 )  := ( others => '0' );
+    signal data_w : std_logic_vector( 31 downto 0 ) := ( others => '0' );
 
-    -- TODO: Verify enable block works as expected (i.e vary it as well)
-    signal enable_blk : std_logic := '1';
+    signal valid_r : std_logic := '0';
+    signal tag_r : std_logic_vector( 2 downto 0 ) := ( others => '0' );
+    signal data_r : std_logic_vector( 35 downto 0 ) := ( others => '0' );
 
 begin
 
     -- map inputs and ouputs
-    block_0 : cache_block port map (enable_blk, enable_w(3 downto 0), enable_r(3 downto 0), data_w(35 downto 0), data_r(35 downto 0));
+    block_0 : cache_block port map (enable_blk, enable_w(3 downto 0), enable_r(3 downto 0), tag_w(2 downto 0), data_w(31 downto 0), valid_r, tag_r(2 downto 0), data_r(31 downto 0));
 
     clk : process
     begin  -- process clk
@@ -62,6 +67,7 @@ begin
     io: process
     begin -- process io
 
+        -- TODO: redo this dumbass
         -- writing all possible values for data_w (2^36 = 68719476736) is probably
         -- overkill, lets just shift bits in 1 @ a time until we have filled all
         -- 35 bits. sadly, sla and sll are deprecated, so I will have to do it

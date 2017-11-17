@@ -18,40 +18,38 @@ use IEEE.numeric_std.all;
 
 use STD.textio.all;
 
-entity cache_set_tb is
+entity set_associative_cache_2_tb is
 
-end cache_set_tb;
+end set_associative_cache_2_tb;
 
-architecture test of cache_set_tb is
+architecture test of set_associative_cache_2_tb is
 
-    component cache_set port (
-        enable_set     : in std_logic;
+    component set_associative_cache_2 port (
+        enable         : in std_logic;
         write_whole_blk: in std_logic;
         w_r            : in std_logic;
         address        : in std_logic_vector( 4 downto 0 );
         data_w         : in std_logic_vector( 31 downto 0 );
-        valid_r        : out std_logic;
-        tag_r          : out std_logic_vector( 2 downto 0 );
+        hit_miss       : out std_logic;
         data_r         : out std_logic_vector( 31 downto 0 ));
     end component;
 
     constant CLK_PERIOD : time := 10 ns;
 
-    for set_0 : cache_set use entity work.cache_set(structural);
+    for cache0 : set_associative_cache_2 use entity work.set_associative_cache_2(structural);
 
     signal clock : std_logic;
-    signal enable_set, write_whole_blk, w_r : std_logic := '0';
+
+    signal enable, write_whole_blk, w_r : std_logic := '0';
     signal address : std_logic_vector( 4 downto 0 ) := ( others => '0' );
     signal data_w : std_logic_vector( 31 downto 0 ) := ( others => '0' );
-
-    signal valid_r : std_logic := '0';
-    signal tag_r : std_logic_vector( 2 downto 0 )  := ( others => '0' );
+    signal hit_miss : std_logic := '0';
     signal data_r : std_logic_vector( 31 downto 0 ) := ( others => '0' );
 
 begin
 
     -- map inputs and ouputs
-    set_0 : cache_set port map (enable_set, write_whole_blk, w_r, address(4 downto 0), data_w(31 downto 0), valid_r, tag_r(2 downto 0), data_r(31 downto 0));
+    cache0 : set_associative_cache_2 port map (enable, write_whole_blk, w_r, address(4 downto 0), data_w(31 downto 0), hit_miss, data_r(31 downto 0));
 
     clk : process
     begin  -- process clk
