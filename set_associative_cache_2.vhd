@@ -15,7 +15,6 @@ use IEEE.std_logic_1164.all;
 
 entity set_associative_cache_2 is port (
     enable         : in std_logic;
-    write_whole_blk: in std_logic;
     w_r            : in std_logic;
     address        : in std_logic_vector( 4 downto 0 );
     data_w         : in std_logic_vector( 31 downto 0 );
@@ -85,7 +84,6 @@ architecture structural of set_associative_cache_2 is
 
     component cache_set port (
         enable_set     : in std_logic;
-        write_whole_blk: in std_logic;
         w_r            : in std_logic;
         address        : in std_logic_vector( 4 downto 0 );
         data_w         : in std_logic_vector( 31 downto 0 );
@@ -156,8 +154,8 @@ begin
     or_2_se1 : or_2 port map (tmp_se(1), tmp_r, se(1));
 
     -- map onto each set
-    cache_set_0 : cache_set port map (se(0), write_whole_blk, w_r, address(4 downto 0), data_w(31 downto 0), valid_out_0, tag_out_0(2 downto 0), data_r(31 downto 0));
-    cache_set_1 : cache_set port map (se(1), write_whole_blk, w_r, address(4 downto 0), data_w(31 downto 0), valid_out_1, tag_out_1(2 downto 0), data_r(31 downto 0));
+    cache_set_0 : cache_set port map (se(0), w_r, address(4 downto 0), data_w(31 downto 0), valid_out_0, tag_out_0(2 downto 0), data_r(31 downto 0));
+    cache_set_1 : cache_set port map (se(1), w_r, address(4 downto 0), data_w(31 downto 0), valid_out_1, tag_out_1(2 downto 0), data_r(31 downto 0));
 
     -- check if we have a tag match
     comparator_3_tag0 : comparator_3 port map (address(4 downto 2), tag_out_0(2 downto 0), tmp_tag_eq0);

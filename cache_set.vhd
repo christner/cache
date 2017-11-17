@@ -65,8 +65,6 @@ architecture structural of cache_set is
 
     for inverter_r : inverter use entity work.inverter(structural);
 
-    for or_2_we0, or_2_we1, or_2_we2, or_2_we3 : or_2 use entity work.or_2(structural);
-
     for and_2_we0, and_2_we1, and_2_we2, and_2_we3 : and_2 use entity work.and_2(structural);
     for and_2_re0, and_2_re1, and_2_re2, and_2_re3 : and_2 use entity work.and_2(structural);
     for and_2_be0, and_2_be1, and_2_be2, and_2_be3, and_2_be4, and_2_be5, and_2_be6, and_2_be7 : and_2 use entity work.and_2(structural);
