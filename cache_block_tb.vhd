@@ -29,10 +29,10 @@ architecture test of cache_block_tb is
         enable_w: in std_logic_vector( 3 downto 0 );
         enable_r: in std_logic_vector( 3 downto 0 );
         tag_w   : in std_logic_vector( 2 downto 0 );
-        data_w  : in std_logic_vector( 31 downto 0 );
+        data_w  : in std_logic_vector( 7 downto 0 );
         valid_r : out std_logic;
         tag_r   : out std_logic_vector( 2 downto 0 );
-        data_r  : out std_logic_vector( 31 downto 0 ));
+        data_r  : out std_logic_vector( 7 downto 0 ));
     end component;
 
     constant CLK_PERIOD : time := 10 ns;
@@ -54,7 +54,7 @@ architecture test of cache_block_tb is
 begin
 
     -- map inputs and ouputs
-    block_0 : cache_block port map (enable_blk, enable_w(3 downto 0), enable_r(3 downto 0), tag_w(2 downto 0), data_w(31 downto 0), valid_r, tag_r(2 downto 0), data_r(31 downto 0));
+    block_0 : cache_block port map (enable_blk, enable_w(3 downto 0), enable_r(3 downto 0), tag_w(2 downto 0), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
 
     clk : process
     begin  -- process clk
