@@ -3,8 +3,9 @@ VCC_FLAGS	= -messages -linedebug -smartorder
 VELAB		= run_ncelab.bash
 VELAB_FLAGS	= -message -access rwc
 
+
 .PHONY : all
-all : cache_cell_tb tag_3_tb cache_byte_tb cache_block_tb cache_set_tb set_associative_cache_2_tb
+all : cache_cell_tb tag_3_tb cache_byte_tb cache_block_tb cache_set_tb set_associative_cache_2_tb state_machine_tb jkff_tb
 
 set_associative_cache_2_tb~ : set_associative_cache_2
 	$(VCC) $(VCC_FLAGS) set_associative_cache_2_tb.vhd
@@ -41,16 +42,39 @@ cache_block_tb~ : cache_block
 	$(VCC) $(VCC_FLAGS) cache_block_tb.vhd
 	$(VELAB) $(VELAB_FLAGS) cache_block_tb
 	@touch cache_block_tb~
-
 .PHONY : cache_block_tb
-cache_block_tb : cache_block_tb~
+cache_set : cache_block_tb~
+
+
+state_machine_tb~ : state_machine~
+	$(VCC) $(VCC_FLAGS) state_machine_tb.vhd
+	$(VELAB) $(VELAB_FLAGS) state_machine_tb
+	@touch state_machine_tb~
+
+
+.PHONY : state_machine_tb
+state_machine_tb : state_machine_tb~
+
 
 cache_block~ : and_2 and_4 or_4 tag_3 cache_byte cache_cell
 	$(VCC) $(VCC_FLAGS) cache_block.vhd
 	@touch cache_block~
-
-.PHONY : cache_block
+.PHONY : cache_clock
 cache_block : cache_block~
+
+state_machine~ : and_4~ and_3~ and_2~ or_4~ or_3~ or_2~ nand_2~ nand_3~ xor_2~ xnor_2~ jkff~ dlatch~ inverter~ nor_2~ and_5~
+	$(VCC) $(VCC_FLAGS) state_machine.vhd
+	@touch state_machine~
+
+.PHONY : state_machine
+state_machine : state_machine~
+
+waitCounter : and_2 and_3 and_4 xor_2 or_2 or_3 xnor_3 jkff inverter
+	$(VCC) $(VCC_FLAGS) waitCounter.vhd
+	@touch waitCounter~
+
+.PHONY : waitCounter
+state_machine : waitCounter~
 
 cache_byte_tb~ : cache_byte
 	$(VCC) $(VCC_FLAGS) cache_byte_tb.vhd
@@ -97,6 +121,16 @@ cache_cell~ : tx inverter dlatch
 .PHONY : cache_cell
 cache_cell : cache_cell~
 
+
+jkff_tb~ : jkff~
+	$(VCC) $(VCC_FLAGS) jkff_tb.vhd
+	$(VELAB) $(VELAB_FLAGS) jkff_tb
+	@touch jkff_tb~
+
+.PHONY : jkff_tb
+jkff_tb : jkff_tb~
+
+
 decoder_3~ : inverter and_3
 	$(VCC) $(VCC_FLAGS) decoder_3.vhd
 	@touch decoder_3~
@@ -132,12 +166,20 @@ inverter~ :
 .PHONY : inverter
 inverter : inverter~
 
+nor_2~ :
+	$(VCC) $(VCC_FLAGS) nor_2.vhd
+	@touch nor_2~
+
+.PHONY : nor_2
+nor_2 : nor_2~
+
 dlatch~ :
 	$(VCC) $(VCC_FLAGS) dlatch.vhd
 	@touch dlatch~
 
 .PHONY : dlatch
 dlatch : dlatch~
+
 
 comparator_3~ : and_3 xnor_2
 	$(VCC) $(VCC_FLAGS) comparator_3.vhd
@@ -149,9 +191,9 @@ comparator_3 : comparator_3~
 tx~ :
 	$(VCC) $(VCC_FLAGS) tx.vhd
 	@touch inverter~
-
 .PHONY : tx
-tx : tx~
+tx: tx~
+
 
 .PRECIOUS : and_%~
 and_%~  :
@@ -188,6 +230,55 @@ xor_%~ :
 .PHONY : xor_%
 xor_% : xor_%~
 	@echo -n
+
+or_3~ :
+	$(VCC) $(VCC_FLAGS) or_3.vhd
+	@touch or_3~
+
+.PHONY : or_3
+or_3 : or_3~
+
+or_2~ :
+	$(VCC) $(VCC_FLAGS) or_2.vhd
+	@touch or_2~
+
+.PHONY : or_2
+or_2 : or_2~
+
+nand_2~ :
+	$(VCC) $(VCC_FLAGS) nand_2.vhd
+	@touch nand_2~
+
+.PHONY : nand_2
+nand_2 : nand_2~
+
+nand_3~ :
+	$(VCC) $(VCC_FLAGS) nand_3.vhd
+	@touch nand_3~
+
+.PHONY : nand_3
+nand_3 : nand_3~
+
+xor_2~ :
+	$(VCC) $(VCC_FLAGS) xor_2.vhd
+	@touch xor_2~
+
+.PHONY : xor_2
+xor_2 : xor_2~
+
+xnor_2~ :
+	$(VCC) $(VCC_FLAGS) xnor_2.vhd
+	@touch xnor_2~
+
+.PHONY : xnor_2
+xnor_2 : xnor_2~
+
+jkff~ :
+	$(VCC) $(VCC_FLAGS) jkff.vhd
+	@touch jkff~
+
+.PHONY : jkff
+jkff : jkff~
 
 .PHONY : clean
 clean :

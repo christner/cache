@@ -117,11 +117,11 @@ Ready : out std_logic
 ); end component;
 
 for and2, and3, and4, and5, and6, and7, and11, and12: and_2 use entity work.and_2(structural);
-for wblk2, and3_jc, and3_jc1, and3_jc2: and_3 use entity work.and_3(structural);
+for  and3_jc, and3_jc1, and3_jc2: and_3 use entity work.and_3(structural);
 for and4_1 : and_4 use entity work.and_4(structural);
 for and5_1 : and_5 use entity work.and_5(structural);
 for or1, or2, or3, or4, or5, or6, or9, or10 : or_2 use entity work.or_2(structural);
-for inv1, inv1a, inv1b, inv1c, inv2j, inv3j, inv4j, wblk1 : inverter use entity work.inverter(structural);
+for inv1, inv1a, inv1b, inv1c, inv2j, inv3j, inv4j : inverter use entity work.inverter(structural);
 for ffA, ffB, ffC : jkff use entity work.jkff(structural);
 for dl1, dl2, dl3 : dlatch use entity work.dlatch(structural);
 
@@ -129,16 +129,16 @@ for or_busy, or3_jc : or_3 use entity work.or_3(structural);
 for and00, andjc : and_2 use entity work.and_2(structural);
 
 -- counter gates
-for and_crst : and_3 use entity work.and_3(structural);
-for xor_crst1, xor_crst2, xor_crst3 : xor_2 use entity work.xor_2(structural);
-for or_crst, or_crst_o : or_3 use entity work.or_3(structural);
-for counter1, counter2, counter3, counter4 : jkff use entity work.jkff(structural);
-for waitTime3a, waitTime1, waitTime0b : and_2 use entity work.and_2(structural);
-for xnorrdy1, xnorrdy2, xnorrdy3, xnorrdy4 : xnor_2 use entity work.xnor_2(structural);
-for andready : and_4 use entity work.and_4(structural);
-for waitTime0 : or_2 use entity work.or_2(structural);
-for waitTime2, invc1, invc2, invc3 : inverter use entity work.inverter(structural);
-for waitTime3, waitTime0a, invclock : inverter use entity work.inverter(structural);
+-- for and_crst : and_3 use entity work.and_3(structural);
+-- for xor_crst1, xor_crst2, xor_crst3 : xor_2 use entity work.xor_2(structural);
+-- for or_crst, or_crst_o : or_3 use entity work.or_3(structural);
+-- for counter1, counter2, counter3, counter4 : jkff use entity work.jkff(structural);
+-- for waitTime3a, waitTime1, waitTime0b : and_2 use entity work.and_2(structural);
+-- for xnorrdy1, xnorrdy2, xnorrdy3, xnorrdy4 : xnor_2 use entity work.xnor_2(structural);
+-- for andready : and_4 use entity work.and_4(structural);
+-- for waitTime0 : or_2 use entity work.or_2(structural);
+-- for waitTime2, invc1, invc2, invc3 : inverter use entity work.inverter(structural);
+-- for waitTime3, waitTime0a, invclock : inverter use entity work.inverter(structural);
 
 for nor1, nor2, nor3, nor5, nor6 : nor_2 use entity work.nor_2(structural);
 for waitCounter_0 : waitCounter use entity work.waitCounter(structural);
