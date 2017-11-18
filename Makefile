@@ -43,7 +43,7 @@ cache_block_tb~ : cache_block
 	$(VELAB) $(VELAB_FLAGS) cache_block_tb
 	@touch cache_block_tb~
 .PHONY : cache_block_tb
-cache_set : cache_block_tb~
+cache_block_tb : cache_block_tb~
 
 
 state_machine_tb~ : state_machine~
