@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------------------
 --
--- Entity: tag
+-- Entity: tag_3
 -- Architecture : structural
 -- Author: danielc3
 -- Created On: 11/10/2017

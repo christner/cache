@@ -20,7 +20,9 @@ end inverter;
 
 architecture structural of inverter is
 begin
+
   output <= not (input);
+
 end structural;
 
 ----------------------------

@@ -41,17 +41,17 @@ architecture structural of cache_cell is
         output:out std_logic);
     end component;
 
-    for latch_1: dlatch use entity work.dlatch(structural);
-    for inverter_1: inverter use entity work.inverter(structural);
-    for tx_1: tx use entity work.tx(structural);
+    for latch_0: dlatch use entity work.dlatch(structural);
+    for inverter_0: inverter use entity work.inverter(structural);
+    for tx_0: tx use entity work.tx(structural);
 
     signal enable_r_not, q, qbar: std_logic;
 
 begin
 
-    latch_1: dlatch port map (data_w, enable_w, q, qbar);
-    inverter_1: inverter port map (enable_r, enable_r_not);
-    tx_1: tx port map (enable_r, enable_r_not, q, data_r);
+    latch_0: dlatch port map (data_w, enable_w, q, qbar);
+    inverter_0: inverter port map (enable_r, enable_r_not);
+    tx_0: tx port map (enable_r, enable_r_not, q, data_r);
 
 end structural;
 
