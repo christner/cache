@@ -23,7 +23,7 @@ end tag_3_tb;
 
 architecture test of tag_3_tb is
 
-component tag port (
+component tag_3 port (
     enable_w: in std_logic;
     enable_r: in std_logic;
     data_w  : in std_logic_vector( 2 downto 0);
@@ -32,7 +32,7 @@ end component;
 
 constant CLK_PERIOD : time := 10 ns;
 
-for tag_1 : tag use entity work.tag(structural);
+for tag_3_0 : tag_3 use entity work.tag_3(structural);
 
 signal clock : std_logic;
 signal enable_w : std_logic := '0';
@@ -44,7 +44,7 @@ signal data_r : std_logic_vector( 2 downto 0 ) := (others => '0');
 begin
 
     -- map inputs to port
-    tag_1 : tag port map (enable_w, enable_r, data_w(2 downto 0), data_r(2 downto 0));
+    tag_3_0 : tag_3 port map (enable_w, enable_r, data_w(2 downto 0), data_r(2 downto 0));
 
     clk : process
     begin  -- process clk

@@ -121,7 +121,6 @@ cache_cell~ : tx inverter dlatch
 .PHONY : cache_cell
 cache_cell : cache_cell~
 
-
 jkff_tb~ : jkff~
 	$(VCC) $(VCC_FLAGS) jkff_tb.vhd
 	$(VELAB) $(VELAB_FLAGS) jkff_tb
@@ -266,7 +265,7 @@ xor_2~ :
 .PHONY : xor_2
 xor_2 : xor_2~
 
-xnor_2~ :
+xnor_2~ : xor_2
 	$(VCC) $(VCC_FLAGS) xnor_2.vhd
 	@touch xnor_2~
 
@@ -284,3 +283,4 @@ jkff : jkff~
 clean :
 	@rm -rf `find . -name "*~*"`
 	@rm -rf *.log
+	@rm -rf INCA_libs
