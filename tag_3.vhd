@@ -16,6 +16,7 @@ use IEEE.std_logic_1164.all;
 entity tag_3 is port (
     enable_w: in std_logic;
     enable_r: in std_logic;
+    rst     : in std_logic;
     data_w  : in std_logic_vector( 2 downto 0);
     data_r  : out std_logic_vector( 2 downto 0));
 end tag_3;
@@ -26,6 +27,7 @@ architecture structural of tag_3 is
         enable_w: in std_logic;
         enable_r: in std_logic;
         data_w  : in std_logic;
+        rst     : in std_logic;
         data_r  : out std_logic);
     end component;
 
@@ -33,9 +35,9 @@ architecture structural of tag_3 is
 
 begin
 
-    bit_0: cache_cell port map (enable_w, enable_r, data_w(0), data_r(0));
-    bit_1: cache_cell port map (enable_w, enable_r, data_w(1), data_r(1));
-    bit_2: cache_cell port map (enable_w, enable_r, data_w(2), data_r(2));
+    bit_0: cache_cell port map (enable_w, enable_r, data_w(0), rst, data_r(0));
+    bit_1: cache_cell port map (enable_w, enable_r, data_w(1), rst, data_r(1));
+    bit_2: cache_cell port map (enable_w, enable_r, data_w(2), rst, data_r(2));
 
 end structural;
 

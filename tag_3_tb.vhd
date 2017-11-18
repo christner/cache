@@ -27,6 +27,7 @@ component tag_3 port (
     enable_w: in std_logic;
     enable_r: in std_logic;
     data_w  : in std_logic_vector( 2 downto 0);
+    rst     : in std_logic;
     data_r  : out std_logic_vector( 2 downto 0));
 end component;
 
@@ -35,6 +36,7 @@ constant CLK_PERIOD : time := 10 ns;
 for tag_3_0 : tag_3 use entity work.tag_3(structural);
 
 signal clock : std_logic;
+signal rst : std_logic := '1';
 signal enable_w : std_logic := '0';
 signal enable_r : std_logic := '0';
 
@@ -44,7 +46,7 @@ signal data_r : std_logic_vector( 2 downto 0 ) := (others => '0');
 begin
 
     -- map inputs to port
-    tag_3_0 : tag_3 port map (enable_w, enable_r, data_w(2 downto 0), data_r(2 downto 0));
+    tag_3_0 : tag_3 port map (enable_w, enable_r, data_w(2 downto 0), rst, data_r(2 downto 0));
 
     clk : process
     begin  -- process clk
@@ -56,6 +58,11 @@ begin
 
     io: process
     begin -- process io
+
+        -- async reset
+        wait for CLK_PERIOD;
+        rst <= '0';
+        wait for CLK_PERIOD;
 
         -- loop for values 0 to 7 (3 bits), write, then read back
         for i in 0 to 7 loop

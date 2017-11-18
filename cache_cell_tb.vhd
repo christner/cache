@@ -20,27 +20,28 @@ end cache_cell_tb;
 
 architecture test of cache_cell_tb is
 
-component cache_cell port (
-    enable_w: in std_logic;
-    enable_r: in std_logic;
-    data_w  : in std_logic;
-    data_r  : out std_logic);
-end component;
+    component cache_cell port (
+        enable_w: in std_logic;
+        enable_r: in std_logic;
+        data_w  : in std_logic;
+        rst     : in std_logic;
+        data_r  : out std_logic);
+    end component;
 
-constant CLK_PERIOD : time := 10 ns;
+    constant CLK_PERIOD : time := 10 ns;
 
-for cell_1 : cache_cell use entity work.cache_cell(structural);
+    for cell_1 : cache_cell use entity work.cache_cell(structural);
 
-signal clock : std_logic;
-
-signal enable_w : std_logic := '0';
-signal enable_r : std_logic := '0';
-signal data_w : std_logic := '0';
-signal data_r : std_logic := '0';
+    signal clock : std_logic;
+    signal rst : std_logic := '1';
+    signal enable_w : std_logic := '0';
+    signal enable_r : std_logic := '0';
+    signal data_w : std_logic := '0';
+    signal data_r : std_logic := '0';
 
 begin
 
-    cell_1 : cache_cell port map (enable_w, enable_r, data_w, data_r);
+    cell_1 : cache_cell port map (enable_w, enable_r, data_w, rst, data_r);
 
     clk : process
     begin  -- process clk
@@ -52,6 +53,11 @@ begin
 
     io: process
     begin -- process io
+
+        -- async reset
+        wait for CLK_PERIOD;
+        rst <= '0';
+        wait for CLK_PERIOD;
 
         -- write 0 and read
         wait for CLK_PERIOD;

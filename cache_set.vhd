@@ -18,6 +18,7 @@ entity cache_set is port (
     w_r            : in std_logic;
     address        : in std_logic_vector( 4 downto 0 );
     data_w         : in std_logic_vector( 7 downto 0 );
+    rst            : in std_logic;
     valid_r        : out std_logic;
     tag_r          : out std_logic_vector( 2 downto 0 );
     data_r         : out std_logic_vector( 7 downto 0 ));
@@ -58,6 +59,7 @@ architecture structural of cache_set is
         enable_r  : in std_logic_vector( 3 downto 0 );
         tag_w     : in std_logic_vector( 2 downto 0 );
         data_w    : in std_logic_vector( 7 downto 0 );
+        rst       : in std_logic;
         valid_r   : out std_logic;
         tag_r     : out std_logic_vector( 2 downto 0 );
         data_r    : out std_logic_vector( 7 downto 0 ));
@@ -124,14 +126,14 @@ begin
     and_2_be7 : and_2 port map(tmp_be(7), enable_set, be(7));
 
     -- enable correct block and subset of bytes; write tag and data if write; retrive valid bit, tag, and  data if read
-    block_0 : cache_block port map (be(0), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
-    block_1 : cache_block port map (be(1), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
-    block_2 : cache_block port map (be(2), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
-    block_3 : cache_block port map (be(3), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
-    block_4 : cache_block port map (be(4), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
-    block_5 : cache_block port map (be(5), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
-    block_6 : cache_block port map (be(6), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
-    block_7 : cache_block port map (be(7), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), valid_r, tag_r(2 downto 0), data_r(7 downto 0));
+    block_0 : cache_block port map (be(0), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), rst, valid_r, tag_r(2 downto 0), data_r(7 downto 0));
+    block_1 : cache_block port map (be(1), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), rst, valid_r, tag_r(2 downto 0), data_r(7 downto 0));
+    block_2 : cache_block port map (be(2), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), rst, valid_r, tag_r(2 downto 0), data_r(7 downto 0));
+    block_3 : cache_block port map (be(3), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), rst, valid_r, tag_r(2 downto 0), data_r(7 downto 0));
+    block_4 : cache_block port map (be(4), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), rst, valid_r, tag_r(2 downto 0), data_r(7 downto 0));
+    block_5 : cache_block port map (be(5), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), rst, valid_r, tag_r(2 downto 0), data_r(7 downto 0));
+    block_6 : cache_block port map (be(6), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), rst, valid_r, tag_r(2 downto 0), data_r(7 downto 0));
+    block_7 : cache_block port map (be(7), we(3 downto 0), re(3 downto 0), address (4 downto 2), data_w(7 downto 0), rst, valid_r, tag_r(2 downto 0), data_r(7 downto 0));
 
 end structural;
 
