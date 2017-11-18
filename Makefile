@@ -189,7 +189,7 @@ comparator_3 : comparator_3~
 
 tx~ :
 	$(VCC) $(VCC_FLAGS) tx.vhd
-	@touch inverter~
+	@touch tx~
 .PHONY : tx
 tx: tx~
 
