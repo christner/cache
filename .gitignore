@@ -1,5 +1,6 @@
 INCA_libs/
 .simvision/
+*.diag
 *.shm/
 
 *.log
