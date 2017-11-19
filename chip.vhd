@@ -63,7 +63,7 @@ begin
 
     state_machine_0 : state_machine port map (start, reset, hit_miss, cpu_rd_wrn, clk, busy, cache_enable, mem_en);
 
-    cache_0 : set_associative_cache_2 port map (cache_enable, cpu_rd_wrn, cpu_add(7 downto 0),  data(7 downto 0), hit_miss, data_r(7 downto 0));
+    cache_0 : set_associative_cache_2 port map (cache_enable, cpu_rd_wrn, cpu_add(7 downto 0),  data(7 downto 0), reset, hit_miss, data_r(7 downto 0));
 
     -- TODO: add 8 bit dlatches for mem_add -> cpu_add
     -- TODO: add 8 bit dlatches for data_r -> cpu_data

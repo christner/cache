@@ -80,7 +80,6 @@ begin
             w_r <= read_enable;
             wait for CLK_PERIOD;
 
-            -- lets cycle through each of the addresses given tag 000 and write data (2^5 = 32)
             for j in 0 to 255 loop
 
                 -- put address and data in place
