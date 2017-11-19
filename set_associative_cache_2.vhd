@@ -18,6 +18,7 @@ entity set_associative_cache_2 is port (
     w_r            : in std_logic;
     address        : in std_logic_vector( 4 downto 0 );
     data_w         : in std_logic_vector( 7 downto 0 );
+    rst            : in std_logic;
     hit_miss       : out std_logic;
     data_r         : out std_logic_vector( 7 downto 0 ));
 end set_associative_cache_2;
@@ -76,8 +77,9 @@ architecture structural of set_associative_cache_2 is
     end component;
 
     component dlatch port (
-        d   : in  std_logic;
-        clk : in  std_logic;
+        d   : in std_logic;
+        clk : in std_logic;
+        rst : in std_logic;
         q   : out std_logic;
         qbar: out std_logic);
     end component;
@@ -86,6 +88,7 @@ architecture structural of set_associative_cache_2 is
         enable_w: in std_logic;
         enable_r: in std_logic;
         data_w  : in std_logic;
+        rst     : in std_logic;
         data_r  : out std_logic);
     end component;
 
@@ -94,6 +97,7 @@ architecture structural of set_associative_cache_2 is
         w_r       : in std_logic;
         address   : in std_logic_vector( 4 downto 0 );
         data_w    : in std_logic_vector( 7 downto 0 );
+        rst       : in std_logic;
         valid_r   : out std_logic;
         tag_r     : out std_logic_vector( 2 downto 0 );
         data_r    : out std_logic_vector( 7 downto 0 ));
@@ -114,7 +118,7 @@ architecture structural of set_associative_cache_2 is
     for and8_se0, and8_se1 : and_8 use entity work.and_8(structural);
 
     for dlatch_0 : dlatch use entity work.dlatch(structural);
-    
+
     for cache_cell_lru0, cache_cell_lru1, cache_cell_lru2, cache_cell_lru3, cache_cell_lru4, cache_cell_lru5, cache_cell_lru6, cache_cell_lru7 : cache_cell use entity work.cache_cell(structural);
 
     for comparator_3_tag0, comparator_3_tag1 : comparator_3 use entity work.comparator_3(structural);
@@ -170,8 +174,8 @@ begin
     or_2_se1 : or_2 port map (tmp_se(1), tmp_r, se(1));
 
     -- map onto each set
-    cache_set_0 : cache_set port map (se(0), w_r, address(4 downto 0), data_w(7 downto 0), valid_out_0, tag_out_0(2 downto 0), data_r(7 downto 0));
-    cache_set_1 : cache_set port map (se(1), w_r, address(4 downto 0), data_w(7 downto 0), valid_out_1, tag_out_1(2 downto 0), data_r(7 downto 0));
+    cache_set_0 : cache_set port map (se(0), w_r, address(4 downto 0), data_w(7 downto 0), rst, valid_out_0, tag_out_0(2 downto 0), data_r(7 downto 0));
+    cache_set_1 : cache_set port map (se(1), w_r, address(4 downto 0), data_w(7 downto 0), rst, valid_out_1, tag_out_1(2 downto 0), data_r(7 downto 0));
 
     -- check if we have a tag match
     comparator_3_tag0 : comparator_3 port map (address(4 downto 2), tag_out_0(2 downto 0), tmp_tag_eq0);
@@ -185,7 +189,7 @@ begin
     or_2_0 : or_2 port map (tmp_teq_v1, tmp_teq_v1, tmp_hit_miss);
 
     -- making a really complicated wire
-    dlatch_0 : dlatch port map(tmp_hit_miss, enable, hit_miss, tmp_crap);
+    dlatch_0 : dlatch port map(tmp_hit_miss, enable, rst, hit_miss, tmp_crap);
 
     -- need to and each blk with hit miss to decide which lru to use
     and_2_lru_e0 : and_2 port map (tmp_blk(0), tmp_hit_miss, tmp_lru_we(0));
@@ -204,14 +208,14 @@ begin
     -- TODO: since this is always reading, there is no reason it couldn't just be a dlatch
     -- if we have a hit on a tag, then it is no longer the least recently used
     -- since there are only 2 possibilities for LRU, it must no be the other set that is LRU
-    cache_cell_lru0 : cache_cell port map (tmp_lru_we(0), vdd, tmp_lru_w, tmp_lru_r(0));
-    cache_cell_lru1 : cache_cell port map (tmp_lru_we(1), vdd, tmp_lru_w, tmp_lru_r(1));
-    cache_cell_lru2 : cache_cell port map (tmp_lru_we(2), vdd, tmp_lru_w, tmp_lru_r(2));
-    cache_cell_lru3 : cache_cell port map (tmp_lru_we(3), vdd, tmp_lru_w, tmp_lru_r(3));
-    cache_cell_lru4 : cache_cell port map (tmp_lru_we(4), vdd, tmp_lru_w, tmp_lru_r(4));
-    cache_cell_lru5 : cache_cell port map (tmp_lru_we(5), vdd, tmp_lru_w, tmp_lru_r(5));
-    cache_cell_lru6 : cache_cell port map (tmp_lru_we(6), vdd, tmp_lru_w, tmp_lru_r(6));
-    cache_cell_lru7 : cache_cell port map (tmp_lru_we(7), vdd, tmp_lru_w, tmp_lru_r(7));
+    cache_cell_lru0 : cache_cell port map (tmp_lru_we(0), vdd, tmp_lru_w, rst, tmp_lru_r(0));
+    cache_cell_lru1 : cache_cell port map (tmp_lru_we(1), vdd, tmp_lru_w, rst, tmp_lru_r(1));
+    cache_cell_lru2 : cache_cell port map (tmp_lru_we(2), vdd, tmp_lru_w, rst, tmp_lru_r(2));
+    cache_cell_lru3 : cache_cell port map (tmp_lru_we(3), vdd, tmp_lru_w, rst, tmp_lru_r(3));
+    cache_cell_lru4 : cache_cell port map (tmp_lru_we(4), vdd, tmp_lru_w, rst, tmp_lru_r(4));
+    cache_cell_lru5 : cache_cell port map (tmp_lru_we(5), vdd, tmp_lru_w, rst, tmp_lru_r(5));
+    cache_cell_lru6 : cache_cell port map (tmp_lru_we(6), vdd, tmp_lru_w, rst, tmp_lru_r(6));
+    cache_cell_lru7 : cache_cell port map (tmp_lru_we(7), vdd, tmp_lru_w, rst, tmp_lru_r(7));
 
 end structural;
 
