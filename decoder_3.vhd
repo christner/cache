@@ -45,12 +45,12 @@ begin
   inverter_2 : inverter port map (address(2), tmp_not(2));
 
   and_3_0 : and_3 port map (tmp_not(0), tmp_not(1), tmp_not(2), output(0));
-  and_3_1 : and_3 port map (address(0), tmp_not(1), tmp_not(2), output(0));
-  and_3_2 : and_3 port map (tmp_not(0), address(1), tmp_not(2), output(0));
-  and_3_3 : and_3 port map (address(0), address(1), tmp_not(2), output(0));
-  and_3_4 : and_3 port map (tmp_not(0), tmp_not(1), address(2), output(0));
-  and_3_5 : and_3 port map (address(0), tmp_not(1), address(2), output(0));
-  and_3_6 : and_3 port map (tmp_not(0), address(1), address(2), output(0));
-  and_3_7 : and_3 port map (address(0), address(1), address(2), output(0));
+  and_3_1 : and_3 port map (address(0), tmp_not(1), tmp_not(2), output(1));
+  and_3_2 : and_3 port map (tmp_not(0), address(1), tmp_not(2), output(2));
+  and_3_3 : and_3 port map (address(0), address(1), tmp_not(2), output(3));
+  and_3_4 : and_3 port map (tmp_not(0), tmp_not(1), address(2), output(4));
+  and_3_5 : and_3 port map (address(0), tmp_not(1), address(2), output(5));
+  and_3_6 : and_3 port map (tmp_not(0), address(1), address(2), output(6));
+  and_3_7 : and_3 port map (address(0), address(1), address(2), output(7));
 
 end structural;
