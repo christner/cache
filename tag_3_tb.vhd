@@ -68,13 +68,14 @@ begin
         for i in 0 to 7 loop
             data_w <= STD_LOGIC_VECTOR(to_unsigned(i, 3));
             wait for CLK_PERIOD;
-            enable_w <= '1'; -- write value to tag
-            wait for CLK_PERIOD;
-            enable_w <= '0';
-            wait for CLK_PERIOD;
             enable_r <= '1'; -- read value from tag
             wait for CLK_PERIOD;
             enable_r <= '0';
+
+            wait for CLK_PERIOD;
+            enable_w <= '1'; -- write value to tag
+            wait for CLK_PERIOD;
+            enable_w <= '0';
 
         end loop;
 

@@ -78,7 +78,7 @@ architecture structural of cache_block is
     for or_4_0 : or_4 use entity work.or_4(structural);
     for or_4_1 : or_4 use entity work.or_4(structural);
     for valid_0 : cache_cell use entity work.cache_cell(structural);
-    for tag_0 : tag_3 use entity work.tag_3(structural);
+    for tag_3_0 : tag_3 use entity work.tag_3(structural);
     for byte_0, byte_1, byte_2, byte_3 : cache_byte use entity work.cache_byte(structural);
 
     signal reading : std_logic;
@@ -114,7 +114,7 @@ begin
 
     -- if we are writing the entire block, we need to update the tag, when we read,
     -- we always want to grab the tag as well
-    tag_0  : tag_3 port map (overwrite, reading, tag_w(2 downto 0), rst, tag_r(2 downto 0));
+    tag_3_0  : tag_3 port map (overwrite, reading, tag_w(2 downto 0), rst, tag_r(2 downto 0));
 
     -- read/write to selected cache bytes
     byte_0 : cache_byte port map (tmp_enable_w(0), tmp_enable_r(0), data_w(7 downto 0), rst, data_r(7 downto 0));

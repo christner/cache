@@ -36,6 +36,8 @@ architecture test of cache_set_tb is
     end component;
 
     constant CLK_PERIOD : time := 10 ns;
+    constant WRITE_ENABLE : std_logic := '1';
+    constant READ_ENABLE : std_logic := '0';
 
     for set_0 : cache_set use entity work.cache_set(structural);
 
@@ -48,10 +50,6 @@ architecture test of cache_set_tb is
     signal valid_r : std_logic := '0';
     signal tag_r : std_logic_vector( 2 downto 0 )  := ( others => '0' );
     signal data_r : std_logic_vector( 7 downto 0 ) := ( others => '0' );
-
-    signal write_enable : std_logic := '1';
-    signal read_enable : std_logic := '0';
-    signal byte_max : std_logic_vector ( 7 downto 0 ) := ( others => '1' );
 
 begin
 
@@ -77,7 +75,7 @@ begin
         for i in 0 to 1 loop
             enable_set <= std_logic(to_unsigned(i, 1)(0));
 
-            w_r <= read_enable;
+            w_r <= READ_ENABLE;
             wait for CLK_PERIOD;
 
             for j in 0 to 255 loop
@@ -87,12 +85,12 @@ begin
                 data_w <= std_logic_vector(to_unsigned(j, 8));
 
                 -- write
-                w_r <= write_enable;
                 wait for CLK_PERIOD;
+                w_r <= WRITE_ENABLE;
 
                 -- read
-                w_r <= read_enable;
                 wait for CLK_PERIOD;
+                w_r <= READ_ENABLE;
 
             end loop;
 

@@ -5,7 +5,7 @@ VELAB_FLAGS	= -message -access rwc
 
 
 .PHONY : all
-all : cache_cell_tb tag_3_tb cache_byte_tb cache_block_tb cache_set_tb set_associative_cache_2_tb state_machine_tb jkff_tb
+all : cache_cell_tb tag_3_tb cache_byte_tb cache_block_tb cache_set_tb cache_tb set_associative_cache_2_tb state_machine_tb jkff_tb
 
 set_associative_cache_2_tb~ : set_associative_cache_2
 	$(VCC) $(VCC_FLAGS) set_associative_cache_2_tb.vhd
@@ -22,7 +22,21 @@ set_associative_cache_2~ : inverter and_2 or_2 and_8 inverter8_1 and8_2 comparat
 .PHONY : set_associative_cache_2
 set_associative_cache_2 : set_associative_cache_2~
 
-#
+cache_tb~ : cache
+	$(VCC) $(VCC_FLAGS) cache_tb.vhd
+	$(VELAB) $(VELAB_FLAGS) cache_tb
+	@touch cache_tb~
+
+.PHONY : cache_tb
+cache_tb : cache_tb~
+
+cache~ : inverter and_2 or_2 comparator_3 dlatch dlatch_3 cache_set
+	$(VCC) $(VCC_FLAGS) cache.vhd
+	@touch cache~
+
+.PHONY : cache
+cache : cache~
+
 cache_set_tb~ : cache_set
 	$(VCC) $(VCC_FLAGS) cache_set_tb.vhd
 	$(VELAB) $(VELAB_FLAGS) cache_set_tb

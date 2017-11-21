@@ -97,8 +97,16 @@ begin
             for j in 0 to 3 loop
 
                 for k in 0 to 7 loop
+
                     -- write the value of k to the tag
                     tag_w <= std_logic_vector(to_unsigned(j, 3));
+
+                    wait for CLK_PERIOD;
+                    enable_r <= be(3 downto 0);
+
+                    -- reset read signal
+                    wait for CLK_PERIOD;
+                    enable_r <= "0000"; -- reset to 0
 
                     -- cycle through 7 values instead of the full 255
                     data_w <= std_logic_vector(shift_left(signed(data_w), 1));
@@ -110,12 +118,7 @@ begin
                     wait for CLK_PERIOD;
                     enable_w <= "0000";
 
-                    wait for CLK_PERIOD;
-                    enable_r <= be(3 downto 0);
 
-                    -- reset read signal
-                    wait for CLK_PERIOD;
-                    enable_r <= "0000"; -- reset to 0
 
                     be := std_logic_vector(shift_left(unsigned(be), 1));
                 end loop;
