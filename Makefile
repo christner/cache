@@ -186,6 +186,20 @@ nor_2~ :
 .PHONY : nor_2
 nor_2 : nor_2~
 
+register8~ : dff
+	$(VCC) $(VCC_FLAGS) register8.vhd
+	@touch register8~
+
+.PHONY : register8
+register8 : register8~
+
+dff~ :
+	$(VCC) $(VCC_FLAGS) dff.vhd
+	@touch dff~
+
+.PHONY : dff
+dff : dff~
+
 dlatch_3~ :
 	$(VCC) $(VCC_FLAGS) dlatch_3.vhd
 	@touch dlatch_3~
@@ -193,7 +207,6 @@ dlatch_3~ :
 .PHONY : dlatch_3
 dlatch_3 : dlatch_3~
 
-#
 dlatch~ :
 	$(VCC) $(VCC_FLAGS) dlatch.vhd
 	@touch dlatch~
@@ -201,13 +214,19 @@ dlatch~ :
 .PHONY : dlatch
 dlatch : dlatch~
 
-
 comparator_3~ : and_3 xnor_2
 	$(VCC) $(VCC_FLAGS) comparator_3.vhd
 	@touch comparator_3~
 
 .PHONY : comparator_3
 comparator_3 : comparator_3~
+
+mux8_2~ : mux1_2
+	$(VCC) $(VCC_FLAGS) mux8_2.vhd
+	@touch mux8_2~
+
+.PHONY : mux8_2
+mux8_2: mux8_2~
 
 mux1_2~ : inverter and_2 or_2
 	$(VCC) $(VCC_FLAGS) mux1_2.vhd
