@@ -71,7 +71,7 @@ architecture structural of chip is
         MemEnable : out std_logic);
     end component;
 
-    component cache port (
+    component set_associative_cache_2 port (
         enable   : in std_logic;
         w_r      : in std_logic;
         address  : in std_logic_vector( 7 downto 0 );
@@ -90,7 +90,7 @@ architecture structural of chip is
 
     for state_machine_0 : state_machine use entity work.state_machine(structural);
 
-    for cache_0 : cache use entity work.cache(structural);
+    for cache_0 : set_associative_cache_2 use entity work.set_associative_cache_2(structural);
 
     signal cache_enable, hit_miss, overwrite, tmp_mem_en : std_logic;
     signal tmp_data, data, data_r : std_logic_vector( 7 downto 0 );
@@ -109,7 +109,7 @@ begin
     dlatch_0 : dlatch port map(tmp_mem_en, Vdd, reset, mem_en, open);
     -- map inputs into the cache
     -- TODO: put overwrite back
-    cache_0 : cache port map (cache_enable, cpu_rd_wrn, cpu_add(7 downto 0),  data(7 downto 0), overwrite, reset, hit_miss, data_r(7 downto 0));
+    cache_0 : set_associative_cache_2 port map (cache_enable, cpu_rd_wrn, cpu_add(7 downto 0),  data(7 downto 0), overwrite, reset, hit_miss, data_r(7 downto 0));
 
     -- grab the address for later use mem_add -> cpu_add
     register8_1 : register8 port map(clk, cpu_add, mem_add);

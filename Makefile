@@ -5,15 +5,14 @@ VELAB_FLAGS	= -message -access rwc
 
 
 .PHONY : all
-all : cache_cell_tb tag_3_tb cache_byte_tb cache_block_tb cache_set_tb cache_tb set_associative_cache_2_tb state_machine_tb jkff_tb chip chip_tb chip_2_way chip_2_way_tb
+all : cache_cell_tb tag_3_tb cache_byte_tb cache_block_tb cache_set_tb cache_tb set_associative_cache_2_tb state_machine_tb jkff_tb chip chip_2_way
 
-chip_tb~ : chip
-	$(VCC) $(VCC_FLAGS) chip_tb.vhd
-	$(VELAB) $(VELAB_FLAGS) chip_tb
-	@touch chip_tb~
+chip_2_way~ : set_associative_cache_2 state_machine cache_byte register8 mux8_2
+	$(VCC) $(VCC_FLAGS) chip_2_way.vhd
+	@touch chip_2_way~
 
-.PHONY : chip_tb
-chip_tb : chip_tb~
+.PHONY : chip
+chip_2_way : chip_2_way~
 
 chip~ : cache state_machine cache_byte register8 mux8_2
 	$(VCC) $(VCC_FLAGS) chip.vhd
@@ -21,7 +20,6 @@ chip~ : cache state_machine cache_byte register8 mux8_2
 
 .PHONY : chip
 chip : chip~
-
 
 set_associative_cache_2_tb~ : set_associative_cache_2
 	$(VCC) $(VCC_FLAGS) set_associative_cache_2_tb.vhd
@@ -31,7 +29,7 @@ set_associative_cache_2_tb~ : set_associative_cache_2
 .PHONY : set_associative_cache_2_tb
 set_associative_cache_2_tb : set_associative_cache_2_tb~
 
-set_associative_cache_2~ : inverter and_2 or_2 and_8 inverter8_1 and8_2 comparator_3 cache_set
+set_associative_cache_2~ : inverter and_2 or_2 and_8 inverter8_1 and8_2 mux1_2 comparator_3 decoder_3 dlatch  dlatch_3 cache_set
 	$(VCC) $(VCC_FLAGS) set_associative_cache_2.vhd
 	@touch set_associative_cache_2~
 

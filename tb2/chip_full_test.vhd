@@ -1,25 +1,29 @@
--- Entity: chip_full_test 
--- Architecture : test 
+----------------------------------------------------------------------------------------------
+--
+-- Entity: chip_full_test
+-- Architecture : test
 -- Author: cpatel2
 -- Created On: 11/01/05
 --
+----------------------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_textio.all;
 use IEEE.std_logic_arith.all;
 use STD.textio.all;
-  
+
 entity chip_full_test is
-  
+
 end chip_full_test;
-  
+
 architecture test of chip_full_test is
 
-  component chip  
+  component chip
     port (
       cpu_add    : in  std_logic_vector(7 downto 0);
       cpu_data   : inout  std_logic_vector(7 downto 0);
-      cpu_rd_wrn : in  std_logic;    
+      cpu_rd_wrn : in  std_logic;
       start      : in  std_logic;
       clk        : in  std_logic;
       reset      : in  std_logic;
@@ -32,7 +36,7 @@ architecture test of chip_full_test is
   end component;
 
 
-  
+
   for c1 : chip use entity work.chip(structural);
 
   signal Vdd, Gnd: std_logic;
@@ -42,6 +46,7 @@ architecture test of chip_full_test is
   signal clk_count: integer:=0;
 
 procedure print_output is
+
    variable out_line: line;
 
    begin
@@ -60,12 +65,12 @@ procedure print_output is
    write (out_line, string'(" CPU data: "));
    write (out_line, cpu_data);
    writeline(output, out_line);
-   
+
    write (out_line, string'(" Memory data: "));
-   write (out_line, mem_data);   
+   write (out_line, mem_data);
    writeline(output, out_line);
    writeline(output, out_line);
-      
+
    write (out_line, string'(" Busy: "));
    write (out_line, busy);
    write (out_line, string'(" Memory  Enable: "));
@@ -74,45 +79,42 @@ procedure print_output is
 
    write (out_line, string'(" Memory  Address: "));
    write (out_line, mem_add);
-   writeline(output, out_line);   
+   writeline(output, out_line);
 
    write (out_line, string'(" ----------------------------------------------"));
    writeline(output, out_line);
 
-   
 end print_output;
-
-
 
 begin
 
   Vdd <= '1';
   Gnd <= '0';
   clk <= clock;
-  
-  c1 : chip port map (cpu_add, cpu_data, cpu_rd_wrn, start, clk, reset, mem_data, Vdd, Gnd, busy, mem_en, mem_add);   
+
+  c1 : chip port map (cpu_add, cpu_data, cpu_rd_wrn, start, clk, reset, mem_data, Vdd, Gnd, busy, mem_en, mem_add);
 
   clking : process
   begin
     clock<= '1', '0' after 5 ns;
     wait for 10 ns;
   end process clking;
-  
+
   io_process: process
 
     file infile  : text is in "./chip_full_in.txt";
     variable buf: line;
     variable value: std_logic_vector(7 downto 0);
     variable value1: std_logic;
-    
+
   begin
 
     while not (endfile(infile)) loop
-      
+
       wait until rising_edge(clock);
-      
+
       readline(infile, buf);
-      
+
       readline(infile, buf);
       read(buf, value);
       cpu_add <= value;
@@ -127,11 +129,11 @@ begin
 
       readline(infile, buf);
       read(buf, value1);
-      start <= value1;      
+      start <= value1;
 
       readline(infile, buf);
       read(buf, value1);
-      reset <= value1;      
+      reset <= value1;
 
       clk_count <= clk_count+1;
 
@@ -140,10 +142,10 @@ begin
       readline(infile, buf);
       read(buf, value);
       mem_data <= value;
-      
+
     end loop;
     wait;
-      
+
   end process io_process;
 
 print_process: process

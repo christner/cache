@@ -10,6 +10,7 @@ entity state_machine is port (
   CLOCK : in std_logic;
   BUSY : out std_logic;
   CacheEnable : out std_logic;
+  OverwriteBlk : out std_logic;
   MemEnable : out std_logic
 ); end state_machine;
 
@@ -117,54 +118,39 @@ reset : in std_logic;
 Ready : out std_logic
 ); end component;
 
-for and2, and3, and4, and5, and6, and7, and11, and12: and_2 use entity work.and_2(structural);
-for  and3_jc, and3_jc1, and3_jc2: and_3 use entity work.and_3(structural);
+for and2, and3, and4, and5, and6, and7, and11, and12 : and_2 use entity work.and_2(structural);
+for  and3_jc, and3_jc1, and3_jc2, wblk2 : and_3 use entity work.and_3(structural);
 for and4_1 : and_4 use entity work.and_4(structural);
 for and5_1 : and_5 use entity work.and_5(structural);
 for or1, or2, or3, or4, or5, or6, or9, or10 : or_2 use entity work.or_2(structural);
-for inv1, inv1a, inv1b, inv1c, inv2j, inv3j, inv4j : inverter use entity work.inverter(structural);
+for inv1, inv1a, inv1b, inv1c, inv2j, inv3j, inv4j, wblk1 : inverter use entity work.inverter(structural);
 for ffA, ffB, ffC : jkff use entity work.jkff(structural);
 for dl1, dl2, dl3 : dlatch use entity work.dlatch(structural);
 
 for or_busy, or3_jc : or_3 use entity work.or_3(structural);
 for and00, andjc : and_2 use entity work.and_2(structural);
 
--- counter gates
--- for and_crst : and_3 use entity work.and_3(structural);
--- for xor_crst1, xor_crst2, xor_crst3 : xor_2 use entity work.xor_2(structural);
--- for or_crst, or_crst_o : or_3 use entity work.or_3(structural);
--- for counter1, counter2, counter3, counter4 : jkff use entity work.jkff(structural);
--- for waitTime3a, waitTime1, waitTime0b : and_2 use entity work.and_2(structural);
--- for xnorrdy1, xnorrdy2, xnorrdy3, xnorrdy4 : xnor_2 use entity work.xnor_2(structural);
--- for andready : and_4 use entity work.and_4(structural);
--- for waitTime0 : or_2 use entity work.or_2(structural);
--- for waitTime2, invc1, invc2, invc3 : inverter use entity work.inverter(structural);
--- for waitTime3, waitTime0a, invclock : inverter use entity work.inverter(structural);
-
 for nor1, nor2, nor3, nor5, nor6 : nor_2 use entity work.nor_2(structural);
 for waitCounter_0 : waitCounter use entity work.waitCounter(structural);
-signal wb0,b1 : std_logic;
+
+signal wb0, b1 : std_logic;
 
 signal Ja_o, Ja1, Ja2, Ja3, Ja4, Ja5, Ja6 : std_logic;
 signal Ka_o, Ka1, Ka2 : std_logic;
+
 signal Jb_o, Jb1, Jb2, Jb3, Jb4, Jb5, Jb6, Jc7 : std_logic;
 signal Kb_o, Kb1, Kb2 : std_logic;
+
 signal Jc_o, Jc1, Jc2, Jc3, Jc4, Jc5, Jc6 : std_logic;
 signal Kc_o, Kc1, Kc2, Kc3, Kc4 : std_logic;
+
 signal currstate, nextstate : std_logic_vector(2 downto 0);
 signal w2, w3 : std_logic;
-
---signal counterReset : std_logic;
 signal Ready : std_logic;
---signal waitTime : std_logic_vector(3 downto 0);
---signal c_xor_n_1, c_xor_n_2, c_xor_n_3, c_or_n, notabc : std_logic;
---signal c1, c2, c3 : std_logic;
---signal outq1, outq2, outq3, outq4 : std_logic;
---signal ready1, ready2, ready3, ready4 : std_logic;
---signal wt1, wt2, wt3, wt4 : std_logic;
-signal one : std_logic := '1';
-signal zero : std_logic := '0';
---signal invclk : std_logic;
+
+signal one : std_logic := '1'; -- TODO: vdd
+signal zero : std_logic := '0';  -- TODO: gnd
+
 begin
   -- CacheEnable Signal
   nor5 : nor_2 port map (currstate(2), currstate(0), CacheEnable);
@@ -176,6 +162,10 @@ begin
   nor6 : nor_2 port map (currstate(0), currstate(1), w3);
   and00 : and_2 port map (w3, currstate(2), MemEnable);
 
+  -- WriteEntireBlk signal
+  wblk1 : inverter port map (currstate(1), wb0);
+  wblk2 : and_3 port map (currstate(2), wb0, currstate(0), OverwriteBlk);
+
   -- J Logic NextState(2)
   inv1: inverter port map (RESET, Ja1); -- ~RESET
   inv1a : inverter port map (currstate(0), Ja2); -- ~C
@@ -185,8 +175,6 @@ begin
   and4_1 : and_4 port map (currstate(1), Ja2, Ja1, Ready, Ja5);
   and5_1 : and_5 port map (Ja3, currstate(0), Ja1, Ja4, Ready, Ja6);
   or1 : or_2 port map (Ja5, Ja6, Ja_o);
-
-
 
   -- K Logic NextState(2)
   or2: or_2 port map (currstate(1), currstate(0), Ka1);
@@ -217,7 +205,6 @@ begin
   or3_jc : or_3 port map (Jc4, Jc5, Jc6, Jc7);
   and3_jc2: and_3 port map (Jc7, Jc2, Ready, Jc_o);
 
-
   -- K Logic NexState(0)
   nor1 : nor_2 port map (currstate(2), HitMiss, Kc1);
   and11: and_2 port map (currstate(1), currstate(0), Kc2);
@@ -235,39 +222,6 @@ begin
   dl2 : dlatch port map (nextstate(1), CLOCK, RESET, currstate(1));
   dl3 : dlatch port map (nextstate(0), CLOCK, RESET, currstate(0));
 
-
   waitCounter_0 : waitCounter port map (currstate(2 downto 0), nextstate(2 downto 0), CLOCK, RESET, Ready);
-  -- -- Set counterReset
-  -- invclock : inverter port map (CLOCK, invclk);
-  -- invc1 : inverter port map (currstate(0), c1);
-  -- invc2 : inverter port map (currstate(1), c2);
-  -- invc3 : inverter port map (currstate(2), c3);
-  -- and_crst : and_3 port map (c1, c2, c3, notabc);
-  -- xor_crst1 : xor_2 port map (currstate(0), nextstate(0), c_xor_n_1);
-  -- xor_crst2 : xor_2 port map (currstate(1), nextstate(1), c_xor_n_2);
-  -- xor_crst3 : xor_2 port map (currstate(2), nextstate(2), c_xor_n_3);
-  -- or_crst : or_3 port map (c_xor_n_1, c_xor_n_2, c_xor_n_3, c_or_n);
-  -- or_crst_o : or_3 port map (notabc, RESET, c_or_n, counterReset);
-  --
-  -- counter1 : jkff port map (one, one, invclk, counterReset, outq1);
-  -- counter2 : jkff port map (one, one, outq1, counterReset, outq2);
-  -- counter3 : jkff port map (one, one, outq2, counterReset, outq3);
-  -- counter4 : jkff port map (one, one, outq3, counterReset, outq4);
-  --
-  -- xnorrdy1 : xnor_2 port map (outq4, waitTime(3), ready1);
-  -- xnorrdy2 : xnor_2 port map (outq3, zero, ready2);
-  -- xnorrdy3 : xnor_2 port map (outq2, waitTime(1), ready3);
-  -- xnorrdy4 : xnor_2 port map (outq1, waitTime(0), ready4);
-  --
-  -- andready : and_4 port map (ready1, ready2, ready3, ready4, Ready);
-  --
-  -- waitTime3 : inverter port map (currstate(1), wt1);
-  -- waitTime3a: and_2 port map (currstate(2), wt1, waitTime(3));
-  -- waitTime2: inverter port map (one, waitTime(2));
-  -- waitTime1: and_2 port map (currstate(2), currstate(1), waitTime(1));
-  -- waitTime0: or_2 port map (currstate(1), currstate(0), wt3);
-  -- waitTime0a: inverter port map (currstate(2), wt4);
-  -- waitTime0b: and_2 port map (wt3, wt4, waitTime(0));
-  -- -- End counter logic
 
 end structural;

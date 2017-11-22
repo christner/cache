@@ -24,6 +24,7 @@ architecture test of state_machine_tb is
     CLOCK : in std_logic;
     BUSY : out std_logic;
     CacheEnable : out std_logic;
+    OverwriteBlk : out std_logic;
     MemEnable : out std_logic);
   end component;
 
@@ -31,7 +32,7 @@ architecture test of state_machine_tb is
 
   for sm1 : state_machine use entity work.state_machine(structural);
 
-  signal start, reset, hitmiss, rdwr, clk, clock, busy, cacheenable, memenable: std_logic;
+  signal start, reset, hitmiss, rdwr, clk, clock, busy, cacheenable, overwriteblk, memenable: std_logic;
 
   signal clk_count: integer:=0;
 
@@ -53,6 +54,8 @@ procedure print_output is
 
    write (out_line, string' (" cache enable: "));
    write (out_line, cacheenable);
+   write (out_line, string'(" write entire block: "));
+   write (out_line, overwriteblk);
    writeline(output, out_line);
 
 
@@ -73,7 +76,7 @@ begin
 
   clk <= clock;
 
-  sm1 : state_machine port map (start, reset, hitmiss, rdwr, clk, busy, cacheenable, memenable);
+  sm1 : state_machine port map (start, reset, hitmiss, rdwr, clk, busy, cacheenable, overwriteblk, memenable);
 
   clking : process
   begin
