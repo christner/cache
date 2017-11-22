@@ -345,3 +345,6 @@ clean :
 	@rm -rf `find . -name "*~*"`
 	@rm -rf *.log
 	@rm -rf INCA_libs
+	@rm -rf .simvision
+	@rm -rf *.diag
+	@rm -rf *.shm

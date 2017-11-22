@@ -7,3 +7,6 @@ INCA_libs/
 *.swp
 *.key
 *~
+
+*.ps
+*.pdf
