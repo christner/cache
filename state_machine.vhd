@@ -99,6 +99,7 @@ end component;
 component dlatch port (
 d : in std_logic;
 clk : in std_logic;
+rst: in std_logic;
 q : out std_logic;
 qbar : out std_logic);
 end component;
@@ -230,9 +231,9 @@ begin
   ffC : jkff port map (Jc_o, Kc_o, CLOCK, RESET, nextstate(0));
 
   -- Latch next state to current state
-  dl1 : dlatch port map (nextstate(2), CLOCK, currstate(2));
-  dl2 : dlatch port map (nextstate(1), CLOCK, currstate(1));
-  dl3 : dlatch port map (nextstate(0), CLOCK, currstate(0));
+  dl1 : dlatch port map (nextstate(2), CLOCK, RESET, currstate(2));
+  dl2 : dlatch port map (nextstate(1), CLOCK, RESET, currstate(1));
+  dl3 : dlatch port map (nextstate(0), CLOCK, RESET, currstate(0));
 
 
   waitCounter_0 : waitCounter port map (currstate(2 downto 0), nextstate(2 downto 0), CLOCK, RESET, Ready);
