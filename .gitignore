@@ -2,6 +2,9 @@ INCA_libs/
 .simvision/
 *.diag
 *.shm/
+*.cdslck*
+vhdlin.summary
+import_vhdl_log
 
 *.log
 *.swp

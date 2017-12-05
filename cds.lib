@@ -7,7 +7,6 @@ SOFTINCLUDE $CDS_INCISIVE/tools/inca/files/cds.lib
 DEFINE analogLib $CDS_IC/tools/dfII/etc/cdslib/artist/analogLib
 DEFINE basic $CDS_IC/tools/dfII/etc/cdslib/basic
 
-
 DEFINE NCSU_Analog_Parts $CDK_DIR/lib/NCSU_Analog_Parts
 DEFINE NCSU_Digital_Parts $CDK_DIR/lib/NCSU_Digital_Parts
 DEFINE NCSU_TechLib_ami06 $CDK_DIR/lib/NCSU_TechLib_ami06
@@ -22,4 +21,4 @@ DEFINE NCSU_TechLib_tsmc04_4M2P $CDK_DIR/lib/NCSU_TechLib_tsmc04_4M2P
 DEFINE vhdl /afs/umbc.edu/users/k/a/katieb5/pub/cache/cache/vhdl
 
 DEFINE cachelib /afs/umbc.edu/users/k/a/katieb5/pub/cache/cache/cachelib
-DEFINE cmpe315lib /afs/umbc.edu/users/k/a/katieb5/home/cmpe315/cmpe315lib
+DEFINE cmpe315 /afs/umbc.edu/users/d/a/danielc3/home/315/cmpe315
