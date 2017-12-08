@@ -1,3 +1,4 @@
+# ignore cadence files
 INCA_libs/
 .simvision/
 *.diag
@@ -5,11 +6,16 @@ INCA_libs/
 *.cdslck*
 vhdlin.summary
 import_vhdl_log
+.cadence/
+.pcdb/
+.oalib
 
+# ignore make and editor files
 *.log
 *.swp
 *.key
 *~
 
+# ignore report images and docs
 *.ps
 *.pdf
