@@ -1,5 +1,6 @@
 # ignore cadence files
 INCA_libs/
+LVS/
 .simvision/
 *.diag
 *.shm/
